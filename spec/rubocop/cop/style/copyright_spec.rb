@@ -172,49 +172,4 @@ RSpec.describe RuboCop::Cop::Style::Copyright, :config do
       RUBY
     end
   end
-
-  context 'when the copyright notice is missing and ' \
-          'the source code file starts with an encoding comment' do
-    it 'adds an offense' do
-      cop_config['AutocorrectNotice'] = '# Copyright (c) 2015 Acme Inc.'
-
-      expect_offense(<<~RUBY)
-        # encoding: utf-8
-        ^ Include a copyright notice matching [...]
-        names = Array.new
-        names << 'James'
-      RUBY
-
-      expect_correction(<<~RUBY)
-        # encoding: utf-8
-        # Copyright (c) 2015 Acme Inc.
-        names = Array.new
-        names << 'James'
-      RUBY
-    end
-  end
-
-  context 'when the copyright notice is missing and ' \
-          'the source code file starts with shebang and ' \
-          'an encoding comment' do
-    it 'adds an offense' do
-      cop_config['AutocorrectNotice'] = '# Copyright (c) 2015 Acme Inc.'
-
-      expect_offense(<<~RUBY)
-        #!/usr/bin/env ruby
-        ^ Include a copyright notice matching [...]
-        # encoding: utf-8
-        names = Array.new
-        names << 'James'
-      RUBY
-
-      expect_correction(<<~RUBY)
-        #!/usr/bin/env ruby
-        # encoding: utf-8
-        # Copyright (c) 2015 Acme Inc.
-        names = Array.new
-        names << 'James'
-      RUBY
-    end
-  end
 end

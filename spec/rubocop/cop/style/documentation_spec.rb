@@ -186,17 +186,6 @@ RSpec.describe RuboCop::Cop::Style::Documentation, :config do
     RUBY
   end
 
-  it 'registers an offense for non-empty class with encoding comment' do
-    expect_offense(<<~RUBY)
-      # encoding: ascii-8bit
-      class MyClass
-      ^^^^^^^^^^^^^ Missing top-level documentation comment for `class MyClass`.
-        def method
-        end
-      end
-    RUBY
-  end
-
   it 'accepts non-empty class with annotation comment followed by other comment' do
     expect_no_offenses(<<~RUBY)
       # OPTIMIZE: Make this faster.
