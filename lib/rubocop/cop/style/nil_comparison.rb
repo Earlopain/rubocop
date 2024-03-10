@@ -41,7 +41,7 @@ module RuboCop
         def_node_matcher :nil_comparison?, '(send _ {:== :===} nil)'
 
         # @!method nil_check?(node)
-        def_node_matcher :nil_check?, '(send _ :nil?)'
+        def_node_matcher :nil_check?, '(send ^_ :nil?)'
 
         def on_send(node)
           return unless node.receiver
