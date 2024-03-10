@@ -80,7 +80,7 @@ module RuboCop
 
         def correction_exploded_to_compact(node)
           exception_node, *message_nodes = *node.arguments
-          return node.source if message_nodes.size > 1
+          return if message_nodes.size > 1
 
           argument = message_nodes.first.source
           exception_class = exception_node.receiver&.source || exception_node.source
@@ -98,9 +98,10 @@ module RuboCop
             return if exception.send_type? && exception.first_argument&.hash_type?
 
             add_offense(node, message: format(COMPACT_MSG, method: node.method_name)) do |corrector|
-              replacement = correction_exploded_to_compact(node)
+              if (replacement = correction_exploded_to_compact(node))
+                corrector.replace(node, replacement)
+              end
 
-              corrector.replace(node, replacement)
               opposite_style_detected
             end
           else
