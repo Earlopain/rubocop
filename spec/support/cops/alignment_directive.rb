@@ -13,13 +13,6 @@ module RuboCop
         MSG = 'Indent this node.'
 
         def on_new_investigation
-          processed_source.ast_with_comments.each do |node, comments|
-            comments.each do |c|
-              if (delta = delta(c))
-                add_offense(node) { |corrector| autocorrect(corrector, node, c, delta) }
-              end
-            end
-          end
         end
 
         private

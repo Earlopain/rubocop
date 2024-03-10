@@ -32,6 +32,8 @@ require 'rubocop/rspec/support'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
 
+RubyVM::YJIT.enable if defined?(RubyVM::YJIT.enable)
+
 RSpec.configure do |config|
   # This setting works together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with

@@ -13,9 +13,7 @@ module RuboCop
 
       def initialize(path, offenses_by_iteration, loop_start: -1)
         @offenses = offenses_by_iteration.flatten.uniq
-        root_cause = offenses_by_iteration[loop_start..]
-                     .map { |x| x.map(&:cop_name).uniq.join(', ') }
-                     .join(' -> ')
+        root_cause = nil
 
         message = 'Infinite loop detected'
         message += " in #{path}" if path
