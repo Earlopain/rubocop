@@ -168,7 +168,12 @@ module RuboCop
       end
 
       def expect_no_offenses(source, file = nil)
-        all_substrings(source).each.with_index { |s, index| inspect_source(s, file, index) }
+        all_substrings(source).each.with_index do |s, index|
+          inspect_source(s, file, index)
+        rescue # rubocop:disable Style/RescueStandardError
+          puts({ source: s })
+          raise
+        end
       end
 
       def parse_annotations(source, raise_error: true, **replacements)
