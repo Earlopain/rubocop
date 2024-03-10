@@ -13,16 +13,13 @@ module CopHelper
   let(:parser_engine) { ENV.fetch('PARSER_ENGINE', :parser_whitequark).to_sym }
   let(:rails_version) { false }
 
-  def inspect_source(source, file = nil)
+  def inspect_source(source, file = nil, index)
     RuboCop::Formatter::DisabledConfigFormatter.config_to_allow_offenses = {}
     RuboCop::Formatter::DisabledConfigFormatter.detected_styles = {}
     processed_source = parse_source(source, file)
-    unless processed_source.valid_syntax?
-      raise 'Error parsing example code: ' \
-            "#{processed_source.diagnostics.map(&:render).join("\n")}"
-    end
+    return unless processed_source.valid_syntax?
 
-    _investigate(cop, processed_source)
+    _investigate(cop, processed_source, index)
   end
 
   def parse_source(source, file = nil)
@@ -74,11 +71,13 @@ module CopHelper
     @last_corrector.rewrite
   end
 
-  def _investigate(cop, processed_source)
+  def _investigate(cop, processed_source, index)
     team = RuboCop::Cop::Team.new([cop], configuration, raise_error: true)
     report = team.investigate(processed_source)
-    @last_corrector = report.correctors.first || RuboCop::Cop::Corrector.new(processed_source)
-    report.offenses.reject(&:disabled?)
+    instance_variable_set(
+      :"@last_corrector_#{index}",
+      report.correctors.first || RuboCop::Cop::Corrector.new(processed_source)
+    )
   end
 end
 

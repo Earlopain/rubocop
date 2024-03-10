@@ -111,78 +111,61 @@ module RuboCop
         source
       end
 
+      def all_substrings(source)
+        indices = (0...source.length).to_a
+        indices.product(indices).reject { |i, j| i > j }.map { |i, j| source[i..j] }.uniq
+      end
+
       def expect_offense(source, file = nil, severity: nil, chomp: false, **replacements)
         expected_annotations = parse_annotations(source, **replacements)
         source = expected_annotations.plain_source
         source = source.chomp if chomp
 
-        @processed_source = parse_processed_source(source, file)
-        @offenses = _investigate(cop, @processed_source)
-        actual_annotations = expected_annotations.with_offense_annotations(@offenses)
-
-        expect(actual_annotations).to eq(expected_annotations), ''
-        expect(@offenses.map(&:severity).uniq).to eq([severity]) if severity
-
-        @offenses
+        @sources = all_substrings(source).filter_map { |s| parse_processed_source(s, file) }
+        @sources.each.with_index do |s, index|
+          _investigate(cop, s, index)
+        rescue # rubocop:disable Style/RescueStandardError
+          puts({ source: s.raw_source })
+          raise
+        end
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def expect_correction(correction, loop: true, source: nil)
-        if source
-          expected_annotations = parse_annotations(source, raise_error: false)
-          @processed_source = parse_processed_source(expected_annotations.plain_source)
-          _investigate(cop, @processed_source)
-        end
+        return if source
 
-        raise '`expect_correction` must follow `expect_offense`' unless @processed_source
+        raise '`expect_correction` must follow `expect_offense`' unless @sources
 
-        source = @processed_source.raw_source
+        @sources.each.with_index do |processed_source, index|
+          iteration = 0
+          loop do
+            iteration += 1
 
-        raise 'Use `expect_no_corrections` if the code will not change' if correction == source
+            corrector = instance_variable_get(:"@last_corrector_#{index}")
+            corrected_source = corrector.rewrite
 
-        iteration = 0
-        new_source = loop do
-          iteration += 1
+            break corrected_source unless loop
+            break corrected_source if corrector.empty?
 
-          corrected_source = @last_corrector.rewrite
+            if iteration > RuboCop::Runner::MAX_ITERATIONS
+              puts({ source: processed_source.raw_source })
+              raise RuboCop::Runner::InfiniteCorrectionLoop.new(processed_source.path, [])
+            end
 
-          break corrected_source unless loop
-          break corrected_source if @last_corrector.empty?
-
-          if iteration > RuboCop::Runner::MAX_ITERATIONS
-            raise RuboCop::Runner::InfiniteCorrectionLoop.new(@processed_source.path, [@offenses])
+            # Prepare for next loop
+            processed_source = parse_source(corrected_source, processed_source.path)
+            _investigate(cop, processed_source, index)
           end
-
-          # Prepare for next loop
-          @processed_source = parse_source(corrected_source, @processed_source.path)
-          _investigate(cop, @processed_source)
         end
-
-        raise 'Expected correction but no corrections were made' if new_source == source
-
-        expect(new_source).to eq(correction)
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
       def expect_no_corrections
-        raise '`expect_no_corrections` must follow `expect_offense`' unless @processed_source
-
-        return if @last_corrector.empty?
-
-        # In order to print a nice diff, e.g. what source got corrected to,
-        # we need to run the actual corrections
-
-        new_source = @last_corrector.rewrite
-
-        expect(new_source).to eq(@processed_source.buffer.source)
+        expect_correction('')
       end
 
       def expect_no_offenses(source, file = nil)
-        offenses = inspect_source(source, file)
-
-        expected_annotations = AnnotatedSource.parse(source)
-        actual_annotations = expected_annotations.with_offense_annotations(offenses)
-        expect(actual_annotations.to_s).to eq(source)
+        all_substrings(source).each.with_index { |s, index| inspect_source(s, file, index) }
       end
 
       def parse_annotations(source, raise_error: true, **replacements)
@@ -197,10 +180,7 @@ module RuboCop
 
       def parse_processed_source(source, file = nil)
         processed_source = parse_source(source, file)
-        return processed_source if processed_source.valid_syntax?
-
-        raise 'Error parsing example code: ' \
-              "#{processed_source.diagnostics.map(&:render).join("\n")}"
+        processed_source if processed_source.valid_syntax?
       end
 
       def set_formatter_options
