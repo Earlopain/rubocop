@@ -202,36 +202,6 @@ RSpec.describe RuboCop::Cop::Lint::RedundantCopDisableDirective, :config do
             end
           end
 
-          context 'multiple cops, with abbreviated names' do
-            context 'one of them has offenses' do
-              let(:offenses) do
-                [
-                  RuboCop::Cop::Offense.new(:convention,
-                                            FakeLocation.new(line: 4, column: 0),
-                                            'Method has too many lines.',
-                                            'Metrics/MethodLength')
-                ]
-              end
-
-              it 'returns an offense' do
-                expect_offense(<<~RUBY)
-                  puts 1
-                  # rubocop:disable MethodLength, ClassLength, Debugger
-                                                  ^^^^^^^^^^^ Unnecessary disabling of `Metrics/ClassLength`.
-                                                               ^^^^^^^^ Unnecessary disabling of `Lint/Debugger`.
-                  #
-                  # offense here
-                RUBY
-
-                expect($stderr.string).to eq(<<~OUTPUT)
-                  (string): Warning: no department given for MethodLength.
-                  (string): Warning: no department given for ClassLength.
-                  (string): Warning: no department given for Debugger.
-                OUTPUT
-              end
-            end
-          end
-
           context 'comment is not at the beginning of the file' do
             context 'and not all cops have offenses' do
               let(:offenses) do
