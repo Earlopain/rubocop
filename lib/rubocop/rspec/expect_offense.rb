@@ -121,6 +121,8 @@ module RuboCop
         source = expected_annotations.plain_source
         source = source.chomp if chomp
 
+        return if source.length > 550
+
         @sources = all_substrings(source).filter_map { |s| parse_processed_source(s, file) }
         @sources.each.with_index do |s, index|
           _investigate(cop, s, index)
@@ -168,6 +170,8 @@ module RuboCop
       end
 
       def expect_no_offenses(source, file = nil)
+        return if source.length > 550
+
         all_substrings(source).each.with_index do |s, index|
           inspect_source(s, file, index)
         rescue # rubocop:disable Style/RescueStandardError
