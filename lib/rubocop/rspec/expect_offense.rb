@@ -155,6 +155,9 @@ module RuboCop
             # Prepare for next loop
             processed_source = parse_source(corrected_source, processed_source.path)
             _investigate(cop, processed_source, index)
+          rescue # rubocop:disable Style/RescueStandardError
+            puts({ source: processed_source.raw_source })
+            raise
           end
         end
       end
