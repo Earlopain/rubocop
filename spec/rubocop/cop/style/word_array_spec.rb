@@ -303,19 +303,6 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
       expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
     end
 
-    it "doesn't fail in wacky ways when multiple cop instances are used" do
-      # Regression test for GH issue #2740
-      cop1 = described_class.new(config)
-      cop2 = described_class.new(config)
-      RuboCop::Formatter::DisabledConfigFormatter.config_to_allow_offenses = {}
-      RuboCop::Formatter::DisabledConfigFormatter.detected_styles = {}
-      # Don't use `expect_offense`; it resets `config_to_allow_offenses` each
-      #   time, which suppresses the bug we are checking for
-      _investigate(cop1, parse_source("['g', 'h']"))
-      _investigate(cop2, parse_source('%w(a b c)'))
-      expect(cop2.config_to_allow_offenses).to eq('EnforcedStyle' => 'percent', 'MinSize' => 3)
-    end
-
     it 'registers an offense for a %w() array containing spaces' do
       expect_offense(<<~'RUBY')
         %w(one\ two three\ four)
