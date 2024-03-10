@@ -63,7 +63,9 @@ RSpec.describe RuboCop::Cop::Style::NilComparison, :config do
       RUBY
     end
 
-    it 'registers no offense when there is no receiver' do
+    # FIXME: `undefined method `[]' for nil` occurs Prism 0.24.0. It has been resolved in
+    # the development line. This will be resolved in Prism > 0.24.0 and higher releases.
+    it 'registers no offense when there is no receiver', broken_on: :prism do
       expect_no_offenses('nil?')
     end
   end
