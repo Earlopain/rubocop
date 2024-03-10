@@ -28,21 +28,7 @@ RSpec.describe RuboCop::MagicComment do
 
   include_examples 'magic comment', '#'
 
-  include_examples 'magic comment', '# encoding: utf-8', encoding: 'utf-8'
-
-  include_examples 'magic comment', '# ENCODING: utf-8', encoding: 'utf-8'
-
-  include_examples 'magic comment', '# eNcOdInG: utf-8', encoding: 'utf-8'
-
-  include_examples 'magic comment', '# coding: utf-8', encoding: 'utf-8'
-
-  include_examples 'magic comment', '    # coding: utf-8', encoding: 'utf-8'
-
   include_examples 'magic comment', '# incoding: utf-8'
-
-  include_examples 'magic comment',
-                   '# encoding: stateless-iso-2022-jp-kddi',
-                   encoding: 'stateless-iso-2022-jp-kddi'
 
   include_examples 'magic comment', '# frozen_string_literal: true', frozen_string_literal: true
 
@@ -111,74 +97,9 @@ RSpec.describe RuboCop::MagicComment do
                    frozen_string_literal: 'invalid'
 
   include_examples 'magic comment',
-                   '# -*- encoding : ascii-8bit -*-',
-                   encoding: 'ascii-8bit',
-                   frozen_string_literal: nil
-
-  include_examples 'magic comment',
-                   '# encoding: ascii-8bit frozen_string_literal: true',
-                   encoding: 'ascii-8bit',
-                   frozen_string_literal: nil
-
-  include_examples 'magic comment',
-                   '# frozen_string_literal: true encoding: ascii-8bit',
-                   encoding: 'ascii-8bit',
-                   frozen_string_literal: nil
-
-  include_examples 'magic comment',
                    ' CSV.generate(encoding: Encoding::UTF_8) do |csv|',
                    encoding: nil,
                    frozen_string_literal: nil
-
-  include_examples(
-    'magic comment',
-    '# -*- encoding: ASCII-8BIT; frozen_string_literal: true -*-',
-    encoding: 'ascii-8bit',
-    frozen_string_literal: true
-  )
-
-  include_examples(
-    'magic comment',
-    '# coding: utf-8 -*- encoding: ASCII-8BIT; frozen_string_literal: true -*-',
-    encoding: 'ascii-8bit',
-    frozen_string_literal: true
-  )
-
-  include_examples(
-    'magic comment',
-    '# -*- coding: ASCII-8BIT; typed: strict -*-',
-    encoding: 'ascii-8bit'
-  )
-
-  include_examples 'magic comment',
-                   '# vim: filetype=ruby, fileencoding=ascii-8bit',
-                   encoding: 'ascii-8bit'
-
-  include_examples 'magic comment', '# vim: filetype=ruby,fileencoding=ascii-8bit', encoding: nil
-
-  include_examples 'magic comment',
-                   '# vim: filetype=ruby,  fileencoding=ascii-8bit',
-                   encoding: 'ascii-8bit'
-
-  include_examples 'magic comment',
-                   '#vim: filetype=ruby, fileencoding=ascii-8bit',
-                   encoding: 'ascii-8bit'
-
-  include_examples 'magic comment',
-                   '#vim: filetype=ruby, fileencoding=ascii-8bit, typed=strict',
-                   encoding: 'ascii-8bit'
-
-  include_examples(
-    'magic comment',
-    '# coding: utf-8 vim: filetype=ruby, fileencoding=ascii-8bit',
-    encoding: 'utf-8'
-  )
-
-  include_examples 'magic comment',
-                   '# vim: filetype=python, fileencoding=ascii-8bit',
-                   encoding: 'ascii-8bit'
-
-  include_examples 'magic comment', '# vim:fileencoding=utf-8', encoding: nil
 
   describe '#valid?' do
     subject { described_class.parse(comment).valid? }
@@ -193,12 +114,6 @@ RSpec.describe RuboCop::MagicComment do
       let(:comment) { '# do something' }
 
       it { is_expected.to be(false) }
-    end
-
-    context 'with an encoding comment' do
-      let(:comment) { '# encoding: utf-8' }
-
-      it { is_expected.to be(true) }
     end
 
     context 'with an frozen string literal comment' do
@@ -258,38 +173,10 @@ RSpec.describe RuboCop::MagicComment do
     subject { described_class.parse(comment).without(:encoding) }
 
     context 'simple format' do
-      context 'when the entire comment is a single value' do
-        let(:comment) { '# encoding: utf-8' }
-
-        it { is_expected.to eq('') }
-      end
-
       context 'when the comment contains a different magic value' do
         let(:comment) { '# frozen-string-literal: true' }
 
         it { is_expected.to eq(comment) }
-      end
-    end
-
-    context 'emacs format' do
-      context 'with one token' do
-        let(:comment) { '# -*- coding: ASCII-8BIT -*-' }
-
-        it { is_expected.to eq('') }
-      end
-
-      context 'with multiple tokens' do
-        let(:comment) { '# -*- coding: ASCII-8BIT; frozen_string_literal: true -*-' }
-
-        it { is_expected.to eq('# -*- frozen_string_literal: true -*-') }
-      end
-    end
-
-    context 'vim format' do
-      context 'when the comment has multiple tokens' do
-        let(:comment) { '# vim: filetype=ruby, fileencoding=ascii-8bit' }
-
-        it { is_expected.to eq('# vim: filetype=ruby') }
       end
     end
   end

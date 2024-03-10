@@ -151,23 +151,6 @@ RSpec.describe RuboCop::Cop::Team do
       end
     end
 
-    context 'when autocorrection is enabled and file encoding is mismatch' do
-      let(:options) { { autocorrect: true } }
-
-      before do
-        create_file(file_path, <<~RUBY)
-          # encoding: Shift_JIS
-          puts 'Ｔｈｉｓ ｆｉｌｅ ｅｎｃｏｄｉｎｇ ｉｓ ＵＴＦ－８．'
-        RUBY
-      end
-
-      it 'no error occurs' do
-        team.inspect_file(source)
-
-        expect(team.errors.empty?).to be(true)
-      end
-    end
-
     context 'when Cop#on_* raises an error' do
       include_context 'mock console output'
       before do

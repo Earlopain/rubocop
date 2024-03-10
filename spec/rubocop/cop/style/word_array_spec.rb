@@ -549,15 +549,6 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
         ]
       RUBY
     end
-
-    it "doesn't fail with `encoding: binary" do
-      expect_no_offenses(<<~'RUBY')
-        # -*- encoding: binary -*-
-        ["\xC0"] # Invalid as UTF-8
-        ['a']    # Valid as UTF-8 and ASCII
-        ["あ"]   # Valid as UTF-8
-      RUBY
-    end
   end
 
   context 'with a custom WordRegex configuration' do

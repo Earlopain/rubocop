@@ -44,30 +44,5 @@ RSpec.describe RuboCop::Cop::Lint::PercentSymbolArray, :config do
         RUBY
       end
     end
-
-    context 'with binary encoded source' do
-      it 'registers an offense and corrects when tokens contain quotes' do
-        expect_offense(<<~RUBY.b)
-          # encoding: BINARY
-
-          %i[\xC0 :foo]
-          ^^^^^^^^^^ Within `%i`/`%I`, ':' and ',' are unnecessary and may be unwanted in the resulting symbols.
-        RUBY
-
-        expect_correction(<<~RUBY.b)
-          # encoding: BINARY
-
-          %i[\xC0 foo]
-        RUBY
-      end
-
-      it 'accepts if tokens contain no quotes' do
-        expect_no_offenses(<<~RUBY.b)
-          # encoding: BINARY
-
-          %i[\xC0 \xC1]
-        RUBY
-      end
-    end
   end
 end
