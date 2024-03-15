@@ -13,17 +13,15 @@ RSpec.describe RuboCop::Cop::Migration::DepartmentName, :config do
     end
 
     it 'registers offenses and corrects' do
-      expect do
-        expect_offense(<<~RUBY, 'file.rb')
-          # rubocop:todo Alias, LineLength
+      expect_offense(<<~RUBY, 'file.rb')
+        # rubocop:todo Alias, LineLength
+                              ^^^^^^^^^^ Department name is missing.
+                        ^^^^^ Department name is missing.
+        alias :ala :bala
+        # rubocop:enable Alias, LineLength
                                 ^^^^^^^^^^ Department name is missing.
-                         ^^^^^ Department name is missing.
-          alias :ala :bala
-          # rubocop:enable Alias, LineLength
-                                  ^^^^^^^^^^ Department name is missing.
-                           ^^^^^ Department name is missing.
-        RUBY
-      end.to output(warning).to_stderr
+                          ^^^^^ Department name is missing.
+      RUBY
 
       expect_correction(<<~RUBY)
         # rubocop:todo Style/Alias, Layout/LineLength
@@ -33,17 +31,15 @@ RSpec.describe RuboCop::Cop::Migration::DepartmentName, :config do
     end
 
     it 'registers offenses and corrects when there is space around `:`' do
-      expect do
-        expect_offense(<<~RUBY, 'file.rb')
-          # rubocop : todo Alias, LineLength
+      expect_offense(<<~RUBY, 'file.rb')
+        # rubocop : todo Alias, LineLength
+                                ^^^^^^^^^^ Department name is missing.
+                          ^^^^^ Department name is missing.
+        alias :ala :bala
+        # rubocop : enable Alias, LineLength
                                   ^^^^^^^^^^ Department name is missing.
-                           ^^^^^ Department name is missing.
-          alias :ala :bala
-          # rubocop : enable Alias, LineLength
-                                    ^^^^^^^^^^ Department name is missing.
-                             ^^^^^ Department name is missing.
-        RUBY
-      end.to output(warning).to_stderr
+                            ^^^^^ Department name is missing.
+      RUBY
 
       expect_correction(<<~RUBY)
         # rubocop : todo Style/Alias, Layout/LineLength
