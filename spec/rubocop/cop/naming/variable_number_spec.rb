@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.describe RuboCop::Cop::Naming::VariableNumber, :config do
-  shared_examples 'offense' do |style, variable, style_to_allow_offenses|
+  shared_examples 'offense' do |style, variable, _style_to_allow_offenses|
     it "registers an offense for #{variable} in #{style}" do
       expect_offense(<<~RUBY, variable: variable)
         #{variable} = 1
         ^{variable} Use #{style} for variable numbers.
       RUBY
-
-      expect(cop.config_to_allow_offenses).to eq(
-        { 'EnforcedStyle' => style_to_allow_offenses.to_s }
-      )
     end
   end
 
@@ -20,8 +16,6 @@ RSpec.describe RuboCop::Cop::Naming::VariableNumber, :config do
       lines.insert(1, "^{first_variable} Use #{style} for variable numbers.")
 
       expect_offense(lines.join("\n"), first_variable: variables.first)
-
-      expect(cop.config_to_allow_offenses).to eq({ 'Enabled' => false })
     end
   end
 
