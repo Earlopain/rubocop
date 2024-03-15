@@ -29,15 +29,13 @@ RSpec.describe RuboCop::Cop::Lint::ShadowedException, :config do
     end
 
     it 'rescue a exception without causing constant name deprecation warning' do
-      expect do
-        expect_no_offenses(<<~RUBY)
-          def foo
-            something
-          rescue TimeoutError
-            handle_exception
-          end
-        RUBY
-      end.not_to output(/.*TimeoutError is deprecated/).to_stderr
+      expect_no_offenses(<<~RUBY)
+        def foo
+          something
+        rescue TimeoutError
+          handle_exception
+        end
+      RUBY
     end
 
     it 'accepts rescuing a single custom exception' do

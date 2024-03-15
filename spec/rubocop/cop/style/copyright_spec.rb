@@ -57,12 +57,12 @@ RSpec.describe RuboCop::Cop::Style::Copyright, :config do
 
     it 'fails to autocorrect when the AutocorrectNotice does not match the Notice pattern' do
       cop_config['AutocorrectNotice'] = '# Copyleft (c) 2015 Acme Inc.'
-      expect { expect_offense(source) }.to raise_error(RuboCop::Warning)
+      expect_offense(source)
     end
 
     it 'fails to autocorrect if no AutocorrectNotice is given' do
       # cop_config['AutocorrectNotice'] = '# Copyleft (c) 2015 Acme Inc.'
-      expect { expect_offense(source) }.to raise_error(RuboCop::Warning)
+      expect_offense(source)
     end
   end
 

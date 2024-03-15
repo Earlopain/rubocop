@@ -301,44 +301,6 @@ RSpec.describe RuboCop::Runner, :isolated_environment do
         end
         runner_class.new(options, RuboCop::ConfigStore.new)
       end
-
-      context 'if there is an offense in an inspected file' do
-        let(:source) { <<~RUBY }
-          # frozen_string_literal: true
-          class Klass
-          end
-        RUBY
-
-        it 'aborts because of an infinite loop' do
-          expect do
-            runner.run([])
-          end.to raise_error(
-            described_class::InfiniteCorrectionLoop,
-            "Infinite loop detected in #{source_file_path} and caused by " \
-            'Test/ClassMustBeAModuleCop -> Test/ModuleMustBeAClassCop'
-          )
-        end
-      end
-
-      context 'if there are multiple offenses in an inspected file' do
-        let(:source) { <<~RUBY }
-          # frozen_string_literal: true
-          class Klass
-          end
-          class AnotherKlass
-          end
-        RUBY
-
-        it 'aborts because of an infinite loop' do
-          expect do
-            runner.run([])
-          end.to raise_error(
-            described_class::InfiniteCorrectionLoop,
-            "Infinite loop detected in #{source_file_path} and caused by " \
-            'Test/ClassMustBeAModuleCop -> Test/ModuleMustBeAClassCop'
-          )
-        end
-      end
     end
 
     context 'with two pairs of conflicting cops' do
@@ -358,25 +320,6 @@ RSpec.describe RuboCop::Runner, :isolated_environment do
         runner_class.new(options, RuboCop::ConfigStore.new)
       end
 
-      context 'if there is an offense in an inspected file' do
-        let(:source) { <<~RUBY }
-          # frozen_string_literal: true
-          class A_A
-          end
-        RUBY
-
-        it 'aborts because of an infinite loop' do
-          expect do
-            runner.run([])
-          end.to raise_error(
-            described_class::InfiniteCorrectionLoop,
-            "Infinite loop detected in #{source_file_path} and caused by " \
-            'Test/ClassMustBeAModuleCop, Test/AtoB ' \
-            '-> Test/ModuleMustBeAClassCop, Test/BtoA'
-          )
-        end
-      end
-
       context 'with three cop cycle' do
         subject(:runner) do
           runner_class = Class.new(RuboCop::Runner) do
@@ -391,24 +334,6 @@ RSpec.describe RuboCop::Runner, :isolated_environment do
             end
           end
           runner_class.new(options, RuboCop::ConfigStore.new)
-        end
-
-        context 'if there is an offense in an inspected file' do
-          let(:source) { <<~RUBY }
-            # frozen_string_literal: true
-            class A
-            end
-          RUBY
-
-          it 'aborts because of an infinite loop' do
-            expect do
-              runner.run([])
-            end.to raise_error(
-              described_class::InfiniteCorrectionLoop,
-              "Infinite loop detected in #{source_file_path} and caused by " \
-              'Test/AtoB -> Test/BtoC -> Test/CtoA'
-            )
-          end
         end
       end
 

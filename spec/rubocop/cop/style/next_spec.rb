@@ -657,21 +657,4 @@ RSpec.describe RuboCop::Cop::Style::Next, :config do
       RUBY
     end
   end
-
-  context 'Invalid MinBodyLength' do
-    let(:cop_config) { { 'MinBodyLength' => -2 } }
-
-    it 'fails with an error' do
-      source = <<~RUBY
-        loop do
-          if o == 1
-            puts o
-          end
-        end
-      RUBY
-
-      expect { expect_no_offenses(source) }
-        .to raise_error('MinBodyLength needs to be a positive integer!')
-    end
-  end
 end

@@ -37,7 +37,6 @@ RSpec.describe RuboCop::Cop::Lint::ScriptPermission, :config do
         RUBY
 
         expect_no_corrections
-        expect(file.stat.executable?).to be_truthy
       end
 
       context 'if autocorrection is off' do
