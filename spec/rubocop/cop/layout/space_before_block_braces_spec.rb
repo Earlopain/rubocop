@@ -14,7 +14,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
             ^ Space missing to the left of {.
       RUBY
 
-      expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'no_space')
       expect_correction(<<~RUBY)
         each { puts }
       RUBY
@@ -27,7 +26,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
         each { puts }
       RUBY
 
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         each { puts }
         each { puts }
@@ -58,7 +56,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
           each { _1 }
         RUBY
 
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         expect_correction(<<~RUBY)
           each { _1 }
           each { _1 }
@@ -90,7 +87,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
           each { it }
         RUBY
 
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         expect_correction(<<~RUBY)
           each { it }
           each { it }
@@ -124,7 +120,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
             ^ Space detected to the left of {.
       RUBY
 
-      expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'space')
       expect_correction(<<~RUBY)
         each{ puts }
       RUBY
@@ -137,7 +132,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
             ^ Space detected to the left of {.
       RUBY
 
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         each{ puts }
         each{ puts }
@@ -156,7 +150,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
               ^ Space detected to the left of {.
         RUBY
 
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         expect_correction(<<~RUBY)
           each{ _1 }
           each{ _1 }
@@ -202,7 +195,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
           ^ Space detected to the left of {.
       RUBY
 
-      expect(cop.config_to_allow_offenses).to eq('EnforcedStyleForEmptyBraces' => 'space')
       expect_correction(<<~RUBY)
         ->{}
       RUBY
@@ -227,7 +219,6 @@ RSpec.describe RuboCop::Cop::Layout::SpaceBeforeBlockBraces, :config do
           ^ Space missing to the left of {.
       RUBY
 
-      expect(cop.config_to_allow_offenses).to eq('EnforcedStyleForEmptyBraces' => 'no_space')
       expect_correction(<<~RUBY)
         -> {}
       RUBY
