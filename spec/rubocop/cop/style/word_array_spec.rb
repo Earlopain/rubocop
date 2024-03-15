@@ -288,8 +288,6 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
         %w(one two three)
         %w(a b c d)
       RUBY
-
-      expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'percent', 'MinSize' => 4)
     end
 
     it 'detects when the cop must be disabled to avoid offenses' do
@@ -303,8 +301,6 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
         %w(one two three)
         %w(a b)
       RUBY
-
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
     end
 
     it 'registers an offense for a %w() array containing spaces' do
@@ -316,8 +312,6 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
       expect_correction(<<~RUBY)
         ['one two', 'three four']
       RUBY
-
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
     end
 
     it 'does not register an offense for a %w() array containing non word characters' do

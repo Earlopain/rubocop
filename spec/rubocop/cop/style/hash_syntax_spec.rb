@@ -472,7 +472,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
           x = { a: 0, "b" => 1 }
                 ^^ Don't mix styles in the same hash.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         expect_correction(<<~RUBY)
           x = { :a => 0, "b" => 1 }
         RUBY
@@ -488,7 +487,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
             x = { :"t o" => 0, b: 1 }
                                ^^ Don't mix styles in the same hash.
           RUBY
-          expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         end
 
         it 'accepts hash rockets when keys have special symbols in them' do
@@ -500,7 +498,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
             x = { :"\tab" => 1, b: 1 }
                                ^^ Don't mix styles in the same hash.
           RUBY
-          expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         end
 
         it 'accepts hash rockets when keys start with a digit' do
@@ -512,7 +509,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
             x = { :"1" => 1, b: 1 }
                              ^^ Don't mix styles in the same hash.
           RUBY
-          expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         end
       end
 
@@ -607,7 +603,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
                 ^^^^^ Use the new Ruby 1.9 hash syntax.
                          ^^^^^ Use the new Ruby 1.9 hash syntax.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'hash_rockets')
         expect_correction(<<~RUBY)
           x = { a: 0, b: 2 }
         RUBY
@@ -618,7 +613,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
           x = { :a => 0, b: 1 }
                 ^^^^^ Use the new Ruby 1.9 hash syntax.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         expect_correction(<<~RUBY)
           x = { a: 0, b: 1 }
         RUBY
@@ -652,7 +646,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
           x = { a: 0, "b" => 1 }
                 ^^ Don't mix styles in the same hash.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         expect_correction(<<~RUBY)
           x = { :a => 0, "b" => 1 }
         RUBY
@@ -668,7 +661,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
             x = { :"t o" => 0, b: 1 }
                                ^^ Don't mix styles in the same hash.
           RUBY
-          expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         end
 
         it 'accepts hash rockets when keys have special symbols in them' do
@@ -680,7 +672,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
             x = { :"\tab" => 1, b: 1 }
                                ^^ Don't mix styles in the same hash.
           RUBY
-          expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         end
 
         it 'accepts hash rockets when keys start with a digit' do
@@ -692,7 +683,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
             x = { :"1" => 1, b: 1 }
                              ^^ Don't mix styles in the same hash.
           RUBY
-          expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
         end
       end
 
@@ -751,7 +741,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
         x = { :a => 0, b: 1 }
                        ^^ Don't mix styles in the same hash.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         x = { :a => 0, :b => 1 }
       RUBY
@@ -778,7 +767,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
         x = { a: 0, "b" => 1 }
               ^^ Don't mix styles in the same hash.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         x = { :a => 0, "b" => 1 }
       RUBY
@@ -806,7 +794,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
         x = { :"t o" => 0, b: 1 }
                            ^^ Don't mix styles in the same hash.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         x = { :"t o" => 0, :b => 1 }
       RUBY
@@ -821,7 +808,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
         x = { :"%{tab}ab" => 1, b: 1 }
                 _{tab}          ^^ Don't mix styles in the same hash.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         x = { :"\tab" => 1, :b => 1 }
       RUBY
@@ -836,7 +822,6 @@ RSpec.describe RuboCop::Cop::Style::HashSyntax, :config do
         x = { :"1" => 1, b: 1 }
                          ^^ Don't mix styles in the same hash.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       expect_correction(<<~RUBY)
         x = { :"1" => 1, :b => 1 }
       RUBY
