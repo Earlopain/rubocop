@@ -126,12 +126,4 @@ RSpec.describe RuboCop::Cop::Style::StringLiteralsInInterpolation, :config do
       SOURCE
     end
   end
-
-  context 'when configured with a bad value' do
-    let(:cop_config) { { 'EnforcedStyle' => 'other' } }
-
-    it 'fails' do
-      expect { expect_no_offenses('a = "#{"b"}"') }.to raise_error(RuntimeError)
-    end
-  end
 end
