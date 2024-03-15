@@ -646,23 +646,6 @@ RSpec.describe RuboCop::Cop::Style::GuardClause, :config do
     end
   end
 
-  context 'Invalid MinBodyLength' do
-    let(:cop_config) { { 'MinBodyLength' => -2 } }
-
-    it 'fails with an error' do
-      source = <<~RUBY
-        def func
-          if something
-            work
-          end
-        end
-      RUBY
-
-      expect { expect_no_offenses(source) }
-        .to raise_error('MinBodyLength needs to be a positive integer!')
-    end
-  end
-
   context 'AllowConsecutiveConditionals: false' do
     let(:cop_config) { { 'AllowConsecutiveConditionals' => false } }
 

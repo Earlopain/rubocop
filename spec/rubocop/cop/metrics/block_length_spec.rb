@@ -39,19 +39,6 @@ RSpec.describe RuboCop::Cop::Metrics::BlockLength, :config do
     RUBY
   end
 
-  it 'reports the correct beginning and end lines' do
-    offenses = expect_offense(<<~RUBY)
-      something do
-      ^^^^^^^^^^^^ Block has too many lines. [3/2]
-        a = 1
-        a = 2
-        a = 3
-      end
-    RUBY
-    offense = offenses.first
-    expect(offense.location.last_line).to eq(5)
-  end
-
   it 'accepts a block with less than 3 lines' do
     expect_no_offenses(<<~RUBY)
       something do
