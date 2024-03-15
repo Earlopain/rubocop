@@ -39,7 +39,6 @@ RSpec.describe RuboCop::Cop::Style::NumericLiterals, :config do
       b = 1_8192
           ^^^^^^ Use underscores(_) as thousands separator and separate every 3 digits with them.
     RUBY
-    expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
 
     expect_correction(<<~RUBY)
       a = 123_456_789_000

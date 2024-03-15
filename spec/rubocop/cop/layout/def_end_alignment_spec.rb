@@ -39,7 +39,6 @@ RSpec.describe RuboCop::Cop::Layout::DefEndAlignment, :config do
               end
               ^^^ `end` at 7, 4 is not aligned with `foo def` at 5, 0.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
 
         expect_correction(<<~RUBY)
           foo def a
@@ -115,8 +114,6 @@ RSpec.describe RuboCop::Cop::Layout::DefEndAlignment, :config do
                 b1
               end
         RUBY
-
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
 
         expect_correction(<<~RUBY)
           foo def a

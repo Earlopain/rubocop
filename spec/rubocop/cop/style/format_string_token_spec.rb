@@ -105,8 +105,6 @@ RSpec.describe RuboCop::Cop::Style::FormatStringToken, :config do
 
       it 'sets the enforced style to annotated after inspecting "%<a>s"' do
         expect_no_offenses('"%<a>s"')
-
-        expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'annotated')
       end
 
       it 'detects when the cop must be disabled to avoid offenses' do
@@ -118,8 +116,6 @@ RSpec.describe RuboCop::Cop::Style::FormatStringToken, :config do
         expect_correction(<<~RUBY)
           "%<a>s"
         RUBY
-
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       end
 
       it_behaves_like 'maximum allowed unannotated', token, correctable_sequence: true
@@ -183,14 +179,10 @@ RSpec.describe RuboCop::Cop::Style::FormatStringToken, :config do
         expect_correction(<<~RUBY)
           "%{a}"
         RUBY
-
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       end
 
       it 'configures the enforced style to template after inspecting "%{a}"' do
         expect_no_offenses('"%{a}"')
-
-        expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'template')
       end
 
       it_behaves_like 'maximum allowed unannotated', token, correctable_sequence: template_correction

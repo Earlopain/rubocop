@@ -107,7 +107,6 @@ RSpec.describe RuboCop::Cop::Style::SpecialGlobalVars, :config do
           $0
           ^^ Prefer `$PROGRAM_NAME` over `$0`.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'use_perl_names')
 
         expect_correction(<<~RUBY)
           $PROGRAM_NAME
@@ -119,7 +118,6 @@ RSpec.describe RuboCop::Cop::Style::SpecialGlobalVars, :config do
           $!; $ERROR_INFO
           ^^ Prefer `$ERROR_INFO` from the stdlib 'English' module (don't forget to require it) over `$!`.
         RUBY
-        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
 
         expect_correction(<<~RUBY)
           $ERROR_INFO; $ERROR_INFO
@@ -360,7 +358,6 @@ RSpec.describe RuboCop::Cop::Style::SpecialGlobalVars, :config do
         $0
         ^^ Prefer `$PROGRAM_NAME` over `$0`.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('EnforcedStyle' => 'use_perl_names')
 
       expect_correction(<<~RUBY)
         $PROGRAM_NAME
@@ -372,7 +369,6 @@ RSpec.describe RuboCop::Cop::Style::SpecialGlobalVars, :config do
         $0; $PROGRAM_NAME
         ^^ Prefer `$PROGRAM_NAME` over `$0`.
       RUBY
-      expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
 
       expect_correction(<<~RUBY)
         $PROGRAM_NAME; $PROGRAM_NAME

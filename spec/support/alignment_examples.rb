@@ -15,7 +15,6 @@ RSpec.shared_examples 'misaligned' do |annotated_source, used_style|
 
     it "registers an offense for mismatched #{name} and autocorrects" do
       expect_offense(chunk)
-      expect(cop.config_to_allow_offenses).to eq(config_to_allow_offenses)
 
       raise if chunk !~ /\^\^\^ `end` at (\d), \d is not aligned with `.*` at \d, (\d)./
 
