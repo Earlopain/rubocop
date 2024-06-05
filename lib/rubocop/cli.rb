@@ -142,9 +142,6 @@ module RuboCop
     end
 
     def parallel_by_default!
-      # See https://github.com/rubocop/rubocop/pull/4537 for JRuby and Windows constraints.
-      return if RUBY_ENGINE != 'ruby' || RuboCop::Platform.windows?
-
       if (@options.keys - DEFAULT_PARALLEL_OPTIONS).empty? &&
          @config_store.for_pwd.for_all_cops['UseCache'] != false
         puts 'Use parallel by default.' if @options[:debug]
