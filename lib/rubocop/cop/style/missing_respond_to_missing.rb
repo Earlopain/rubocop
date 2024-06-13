@@ -26,7 +26,8 @@ module RuboCop
 
         def on_def(node)
           return unless node.method?(:method_missing)
-          return if implements_respond_to_missing?(node)
+          return unless (parent = node&.parent)
+          return if implements_respond_to_missing?(node, parent.parent)
 
           add_offense(node)
         end
@@ -34,8 +35,8 @@ module RuboCop
 
         private
 
-        def implements_respond_to_missing?(node)
-          return false unless (grand_parent = node.parent.parent)
+        def implements_respond_to_missing?(node, grand_parent)
+          return false unless grand_parent
 
           grand_parent.each_descendant(node.type) do |descendant|
             return true if descendant.method?(:respond_to_missing?)

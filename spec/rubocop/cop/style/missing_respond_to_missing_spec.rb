@@ -97,4 +97,11 @@ RSpec.describe RuboCop::Cop::Style::MissingRespondToMissing, :config do
       end
     RUBY
   end
+
+  it 'registers no offense when method_missing is outside of a class body' do
+    expect_no_offenses(<<~RUBY)
+      def method_missing
+      end
+    RUBY
+  end
 end
