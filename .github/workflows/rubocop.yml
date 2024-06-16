@@ -134,6 +134,33 @@ jobs:
       - name: Check documentation syntax
         run: bundle exec rake documentation_syntax_check
 
+  integration:
+    runs-on: ubuntu-latest
+    name: Integration - ${{ matrix.repo }}
+    strategy:
+      fail-fast: false
+      matrix:
+        repo:
+          - rubocop-performance
+          - rubocop-rspec
+          - rubocop-rails
+          - rubocop-minitest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone Repo
+        run: git clone https://github.com/rubocop/${{ matrix.repo }}
+      - name: Modify Gemfile
+        working-directory: $GITHUB_WORKSPACE/${{ matrix.repo }}
+        run: |
+          echo "gem 'rubocop', path: $GITHUB_WORKSPACE/rubocop" > Gemfile
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+          bundler-cache: true
+      - name: spec
+        run: bundle exec rake spec
+
   prism:
     runs-on: ubuntu-latest
     name: Prism
