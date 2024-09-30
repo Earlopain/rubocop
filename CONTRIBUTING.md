@@ -71,6 +71,8 @@ We also run [codespell](https://github.com/codespell-project/codespell) with Git
 $ codespell --ignore-words=codespell.txt
 ```
 
+If you have `codespell` installed locally, it will automatically run with `bundle exec rake`.
+
 ### Linting YAML files
 
 We are running [yamllint](https://github.com/adrienverge/yamllint) for linting YAML files. This is also run by [GitHub Actions](https://github.com/rubocop/rubocop/blob/master/.github/workflows/linting.yml).
