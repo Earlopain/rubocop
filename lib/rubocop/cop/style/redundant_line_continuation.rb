@@ -70,6 +70,7 @@ module RuboCop
 
         MSG = 'Redundant line continuation.'
         ALLOWED_STRING_TOKENS = %i[tSTRING tSTRING_CONTENT].freeze
+        REQUIRES_CONTINUATION_TOKENS = %i[tEQ tOROP tANDOP].freeze
         ARGUMENT_TYPES = %i[
           kFALSE kNIL kSELF kTRUE tCONSTANT tCVAR tFLOAT tGVAR tIDENTIFIER tINTEGER tIVAR
           tLBRACK tLCURLY tLPAREN_ARG tSTRING tSTRING_BEG tSYMBOL tXSTRING_BEG
@@ -95,7 +96,7 @@ module RuboCop
           !ends_with_backslash_without_comment?(range.source_line) ||
             string_concatenation?(range.source_line) ||
             start_with_arithmetic_operator?(processed_source[range.line]) ||
-            inside_string_literal_or_method_with_argument?(range) ||
+            require_line_continuation_through_token?(range) ||
             leading_dot_method_chain_with_blank_line?(range)
         end
 
@@ -107,11 +108,19 @@ module RuboCop
           /["']\s*\\\z/.match?(source_line)
         end
 
-        def inside_string_literal_or_method_with_argument?(range)
+        def require_line_continuation_through_token?(range)
+          any_token_pair? do |token, next_token|
+            inside_string_literal?(range, token) ||
+              method_with_argument?(token, next_token) ||
+              REQUIRES_CONTINUATION_TOKENS.include?(next_token.type)
+          end
+        end
+
+        def any_token_pair?
           processed_source.tokens.each_cons(2).any? do |token, next_token|
             next if token.line == next_token.line
 
-            inside_string_literal?(range, token) || method_with_argument?(token, next_token)
+            yield(token, next_token)
           end
         end
 

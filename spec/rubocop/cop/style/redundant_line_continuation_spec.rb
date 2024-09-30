@@ -666,4 +666,17 @@ RSpec.describe RuboCop::Cop::Style::RedundantLineContinuation, :config do
         baz)
     RUBY
   end
+
+  # NOTE: With `Style/RedundantLineBreak` this will eventually correct to `puts foo(1, 1) == bar`.
+  context 'with incompatible tokens on the next line' do
+    %i[== || &&].each do |token|
+      it "does not register an offense when line continuation is followed by `#{token}`" do
+        expect_no_offenses(<<~RUBY)
+          puts foo(1,
+                   1) \\
+              #{token} bar
+        RUBY
+      end
+    end
+  end
 end
