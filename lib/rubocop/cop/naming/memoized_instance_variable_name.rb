@@ -154,84 +154,62 @@ module RuboCop
               'method name `%<method>s`. Use `@%<suggested_var>s` instead.'
         UNDERSCORE_REQUIRED = 'Memoized variable `%<var>s` does not start ' \
                               'with `_`. Use `@%<suggested_var>s` instead.'
-        DYNAMIC_DEFINE_METHODS = %i[define_method define_singleton_method].to_set.freeze
+        RESTRICT_ON_SEND = %i[define_method define_singleton_method].freeze
 
-        # @!method method_definition?(node)
-        def_node_matcher :method_definition?, <<~PATTERN
-          ${
-            (block (send _ %DYNAMIC_DEFINE_METHODS ({sym str} $_)) ...)
-            (def $_ ...)
-            (defs _ $_ ...)
-          }
-        PATTERN
-
-        # rubocop:disable Metrics/AbcSize
-        # rubocop:disable Metrics/MethodLength
-        def on_or_asgn(node)
-          lhs, _value = *node
-          return unless lhs.ivasgn_type?
-
-          method_node, method_name = find_definition(node)
-          return unless method_node
-
-          body = method_node.body
-          return unless body == node || body.children.last == node
-
-          return if matches?(method_name, lhs)
-
-          suggested_var = suggested_var(method_name)
-          msg = format(
-            message(lhs.children.first.to_s),
-            var: lhs.children.first.to_s,
-            suggested_var: suggested_var,
-            method: method_name
+        # @!method memoized(node)
+        def_node_matcher :memoized, <<~PATTERN
+          (
+            # method definition
+            {
+              def $_method_name                            # def foo; end
+              | defs (...) $_method_name                   # def self.foo; end
+              | block (send _ _ ({sym str} $_method_name)) # define_method(:foo) do; end
+            } (args)
+            # method body. This uses `?` instead of `{}` because of different amount of matches
+            (or-asgn $(ivasgn _ ...) ...)?                          # @foo ||= :bar
+            (begin !`{ivasgn ivar}+ (or-asgn $(ivasgn _ ...) ...))? # same as above with prelude
+            (begin                                                  # return @foo if defined?(@foo)
+              (if                                                   # @foo = bar
+                (defined $(ivar _))
+                (return $(ivar _)) nil?
+              )
+              $(ivasgn _ ...) ...
+            )?
           )
-          add_offense(lhs, message: msg) do |corrector|
-            corrector.replace(lhs.loc.name, "@#{suggested_var}")
-          end
-        end
-        # rubocop:enable Metrics/MethodLength
-        # rubocop:enable Metrics/AbcSize
-
-        # @!method defined_memoized?(node, ivar)
-        def_node_matcher :defined_memoized?, <<~PATTERN
-          (begin
-            (if (defined $(ivar %1)) (return $(ivar %1)) nil?)
-            ...
-            $(ivasgn %1 _))
         PATTERN
 
-        # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        def on_defined?(node)
-          arg = node.first_argument
-          return false unless arg.ivar_type?
+        def on_send(node)
+          return unless parent = (node.parent)
+          return unless parent.block_type?
+          
+          handle_ivars(parent)
+        end
 
-          method_node, method_name = find_definition(node)
-          return false unless method_node
+        def on_def(node)
+          handle_ivars(node)
+        end
+        alias on_defs on_def
 
-          var_name = arg.children.first
-          defined_memoized?(method_node.body, var_name) do |defined_ivar, return_ivar, ivar_assign|
-            return false if matches?(method_name, ivar_assign)
+        def handle_ivars(node)
+          memoized(node) do |method_name, *ivar_matches|
+            next if method_name == :initialize
 
-            suggested_var = suggested_var(method_name)
-            msg = format(
-              message(var_name.to_s),
-              var: var_name.to_s,
-              suggested_var: suggested_var,
-              method: method_name
-            )
-            add_offense(defined_ivar, message: msg) do |corrector|
-              corrector.replace(defined_ivar, "@#{suggested_var}")
-            end
-            add_offense(return_ivar, message: msg) do |corrector|
-              corrector.replace(return_ivar, "@#{suggested_var}")
-            end
-            add_offense(ivar_assign.loc.name, message: msg) do |corrector|
-              corrector.replace(ivar_assign.loc.name, "@#{suggested_var}")
+            ivar_matches.flatten.each do |match|
+              next if matches?(method_name, match)
+
+              suggested_var = suggested_var(method_name)
+              msg = format(
+                message(var_name(match)),
+                var: var_name(match),
+                suggested_var: suggested_var,
+                method: method_name
+              )
+              add_offense(offense_range(match), message: msg) do |corrector|
+                corrector.replace(offense_range(match), "@#{suggested_var}")
+              end
             end
           end
         end
-        # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
         private
 
@@ -239,25 +217,27 @@ module RuboCop
           'EnforcedStyleForLeadingUnderscores'
         end
 
-        def find_definition(node)
-          # Methods can be defined in a `def` or `defs`,
-          # or dynamically via a `block` node.
-          node.each_ancestor(:def, :defs, :block).each do |ancestor|
-            method_node, method_name = method_definition?(ancestor)
-            return [method_node, method_name] if method_node
-          end
-
-          nil
-        end
-
-        def matches?(method_name, ivar_assign)
-          return true if ivar_assign.nil? || method_name == :initialize
-
+        def matches?(method_name, node)
           method_name = method_name.to_s.delete('!?')
-          variable = ivar_assign.children.first
-          variable_name = variable.to_s.sub('@', '')
+          variable_name = var_name(node).to_s.sub('@', '')
 
           variable_name_candidates(method_name).include?(variable_name)
+        end
+
+        def var_name(match)
+          if match.ivasgn_type?
+            match.name.to_s
+          else
+            match.children[0].to_s
+          end
+        end
+
+        def offense_range(match)
+          if match.ivasgn_type?
+            match.loc.name
+          else
+            match
+          end
         end
 
         def message(variable)

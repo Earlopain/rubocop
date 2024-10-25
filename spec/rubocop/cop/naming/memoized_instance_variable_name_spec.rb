@@ -134,6 +134,26 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
             end
           RUBY
         end
+
+        it 'registers no offense when there are two instance variables' do
+          expect_no_offenses(<<~RUBY)
+            def foo
+              helper_variable = something_we_need_to_calculate_foo
+              @bar ||= baz
+              @foo ||= calculate_expensive_thing(helper_variable)
+            end
+          RUBY
+        end
+
+        it 'registers no offense when there are two instance variables, both not named liked the method' do
+          expect_no_offenses(<<~RUBY)
+            def foo
+              helper_variable = something_we_need_to_calculate_foo
+              @bar ||= baz
+              @bat ||= calculate_expensive_thing(helper_variable)
+            end
+          RUBY
+        end
       end
 
       context 'memoized variable matches method name' do
