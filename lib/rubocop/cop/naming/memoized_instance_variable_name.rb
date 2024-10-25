@@ -156,6 +156,9 @@ module RuboCop
                               'with `_`. Use `@%<suggested_var>s` instead.'
         RESTRICT_ON_SEND = %i[define_method define_singleton_method].freeze
 
+        # TODO: This can be simplified and expanded when https://github.com/rubocop/rubocop-ast/issues/323
+        # is resolved. The `defined?`/`instance_variable_defined?` can be ORed and `$(ivasgn _ ...) ...`
+        # can become `{ (or-asgn (ivasgn _ ...) ...) | (ivasgn _ ...) ... }` to also handle `||=` assignment.
         # @!method memoized(node)
         def_node_matcher :memoized, <<~PATTERN
           (
@@ -171,6 +174,15 @@ module RuboCop
             (begin                                                  # return @foo if defined?(@foo)
               (if                                                   # @foo = bar
                 (defined $(ivar _))
+                (return $(ivar _)) nil?
+              )
+              $(ivasgn _ ...) ...
+            )?
+            (begin                                            # return @foo if instance_variable_defined?(:@foo)
+              (if                                             # @foo = bar
+                (send nil? :instance_variable_defined?
+                  $(sym _)
+                )
                 (return $(ivar _)) nil?
               )
               $(ivasgn _ ...) ...
@@ -205,7 +217,9 @@ module RuboCop
                 method: method_name
               )
               add_offense(offense_range(match), message: msg) do |corrector|
-                corrector.replace(offense_range(match), "@#{suggested_var}")
+                replacement = "@#{suggested_var}"
+                replacement = ":#{replacement}" if match.sym_type?
+                corrector.replace(offense_range(match), replacement)
               end
             end
           end

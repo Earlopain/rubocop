@@ -366,13 +366,23 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
       end
     end
 
-    context 'when defined?-based memoization is used' do
+    shared_examples "defined-based memoization" do
+      let(:method) { type }
+      def arg(ivar)
+        case method
+        when :defined?
+          ivar
+        when :instance_variable_defined?
+          ":#{ivar}"
+        end
+      end
+
       it 'registers an offense when memoized variable does not match method name' do
-        expect_offense(<<~RUBY)
+        expect_offense(<<~RUBY, method: method, arg: arg(:@my_var))
           def x
-            return @my_var if defined?(@my_var)
+            return @my_var if #{method}(#{arg(:@my_var)})
                    ^^^^^^^ Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
-                                       ^^^^^^^ Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
+                              _{method} ^{arg} Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
             @my_var = false
             ^^^^^^^ Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
           end
@@ -380,18 +390,18 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
 
         expect_correction(<<~RUBY)
           def x
-            return @x if defined?(@x)
+            return @x if #{method}(#{arg(:@x)})
             @x = false
           end
         RUBY
       end
 
       it 'registers an offense when memoized variable does not match class method name' do
-        expect_offense(<<~RUBY)
+        expect_offense(<<~RUBY, method: method, arg: arg(:@my_var))
           def self.x
-            return @my_var if defined?(@my_var)
+            return @my_var if #{method}(#{arg(:@my_var)})
                    ^^^^^^^ Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
-                                       ^^^^^^^ Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
+                              _{method} ^{arg} Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
             @my_var = false
             ^^^^^^^ Memoized variable `@my_var` does not match method name `x`. Use `@x` instead.
           end
@@ -399,7 +409,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
 
         expect_correction(<<~RUBY)
           def self.x
-            return @x if defined?(@x)
+            return @x if #{method}(#{arg(:@x)})
             @x = false
           end
         RUBY
@@ -409,7 +419,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
         it 'does not register an offense' do
           expect_no_offenses(<<~RUBY)
             def x
-              return @x if defined?(@x)
+              return @x if #{method}(@x)
               @x = false
             end
           RUBY
@@ -418,7 +428,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
         it 'does not register an offense when method has leading `_`' do
           expect_no_offenses(<<~RUBY)
             def _foo
-              return @foo if defined?(@foo)
+              return @foo if #{method}(#{arg(:@foo)})
               @foo = false
             end
           RUBY
@@ -427,7 +437,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
         it 'does not register an offense with a leading `_` for both names' do
           expect_no_offenses(<<~RUBY)
             def _foo
-              return @_foo if defined?(@_foo)
+              return @_foo if #{method}(#{arg(:@_foo)})
               @_foo = false
             end
           RUBY
@@ -437,7 +447,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
           it 'does not register an offense' do
             expect_no_offenses(<<~RUBY)
               def a
-                return x if defined?(x)
+                return x if #{method}(x)
                 x = 1
               end
             RUBY
@@ -447,7 +457,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
         it 'does not register an offense when memoized variable matches predicate method name' do
           expect_no_offenses(<<~RUBY)
             def a?
-              return @a if defined?(@a)
+              return @a if #{method}(#{arg(:@a)})
               @a = false
             end
           RUBY
@@ -456,7 +466,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
         it 'does not register an offense when memoized variable matches bang method name' do
           expect_no_offenses(<<~RUBY)
             def a!
-              return @a if defined?(@a)
+              return @a if #{method}(#{arg(:@a)})
               @a = false
             end
           RUBY
@@ -467,7 +477,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
         expect_no_offenses(<<~RUBY)
           def x
             do_something
-            return @x if defined?(@x)
+            return @x if #{method}(#{arg(:@x)})
             @x = false
           end
         RUBY
@@ -476,7 +486,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
       it 'does not register an offense when some code after assignment' do
         expect_no_offenses(<<~RUBY)
           def x
-            return @x if defined?(@x)
+            return @x if #{method}(#{arg(:@x)})
             @x = false
             do_something
           end
@@ -486,7 +496,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
       it 'does not register an offense when there is no assignment' do
         expect_no_offenses(<<~RUBY)
           def x
-            return @x if defined?(@x)
+            return @x if #{method}(#{arg(:@x)})
           end
         RUBY
       end
@@ -496,7 +506,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
           it 'does not register an offense' do
             expect_no_offenses(<<~RUBY)
               define_method(:values) do
-                return @values if defined?(@values)
+                return @values if #{method}(#{arg(:@values)})
                 @values = do_something
               end
             RUBY
@@ -505,11 +515,11 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
 
         context 'when the variable name does not match the method name' do
           it 'registers an offense' do
-            expect_offense(<<~RUBY)
+            expect_offense(<<~RUBY, method: method, arg: arg(:@foo))
               define_method(:values) do
-                return @foo if defined?(@foo)
+                return @foo if #{method}(#{arg(:@foo)})
                        ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
-                                        ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
+                               _{method} ^{arg} Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
                 @foo = do_something
                 ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
               end
@@ -517,7 +527,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
 
             expect_correction(<<~RUBY)
               define_method(:values) do
-                return @values if defined?(@values)
+                return @values if #{method}(#{arg(:@values)})
                 @values = do_something
               end
             RUBY
@@ -530,7 +540,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
               expect_no_offenses(<<~RUBY)
                 def self.inherited(klass)
                   klass.define_method(:values) do
-                    return @values if defined?(@values)
+                    return @values if #{method}(#{arg(:@values)})
                     @values = do_something
                   end
                 end
@@ -540,12 +550,12 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
 
           context 'when the method does not match' do
             it 'registers an offense' do
-              expect_offense(<<~RUBY)
+              expect_offense(<<~RUBY, method: method, arg: arg(:@foo))
                 def self.inherited(klass)
                   klass.define_method(:values) do
-                    return @foo if defined?(@foo)
+                    return @foo if #{method}(#{arg(:@foo)})
                            ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
-                                            ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
+                                   _{method} ^{arg} Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
                     @foo = do_something
                     ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
                   end
@@ -555,7 +565,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
               expect_correction(<<~RUBY)
                 def self.inherited(klass)
                   klass.define_method(:values) do
-                    return @values if defined?(@values)
+                    return @values if #{method}(#{arg(:@values)})
                     @values = do_something
                   end
                 end
@@ -570,7 +580,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
               expect_no_offenses(<<~RUBY)
                 def self.inherited(klass)
                   klass.define_singleton_method(:values) do
-                    return @values if defined?(@values)
+                    return @values if #{method}(#{arg(:@values)})
                     @values = do_something
                   end
                 end
@@ -580,12 +590,12 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
 
           context 'when the method does not match' do
             it 'registers an offense' do
-              expect_offense(<<~RUBY)
+              expect_offense(<<~RUBY, method: method, arg: arg(:@foo))
                 def self.inherited(klass)
                   klass.define_singleton_method(:values) do
-                    return @foo if defined?(@foo)
+                    return @foo if #{method}(#{arg(:@foo)})
                            ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
-                                            ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
+                                   _{method} ^{arg} Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
                     @foo = do_something
                     ^^^^ Memoized variable `@foo` does not match method name `values`. Use `@values` instead.
                   end
@@ -595,7 +605,7 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
               expect_correction(<<~RUBY)
                 def self.inherited(klass)
                   klass.define_singleton_method(:values) do
-                    return @values if defined?(@values)
+                    return @values if #{method}(#{arg(:@values)})
                     @values = do_something
                   end
                 end
@@ -604,6 +614,18 @@ RSpec.describe RuboCop::Cop::Naming::MemoizedInstanceVariableName, :config do
           end
         end
       end
+    end
+
+    context 'when defined?-based memoization is used' do
+      let(:type) { :defined? }
+
+      include_examples 'defined-based memoization'
+    end
+
+    context 'when instance_variable_defined?-based memoization is used' do
+      let(:type) { :instance_variable_defined? }
+
+      include_examples 'defined-based memoization'
     end
   end
 
