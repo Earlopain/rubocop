@@ -2,6 +2,7 @@
 
 require 'fileutils'
 
+# Mixin for common file operations.
 module FileHelper
   def create_file(file_path, content, retain_line_terminators: false)
     file_path = File.expand_path(file_path)
@@ -46,6 +47,7 @@ module FileHelper
     FileUtils.symlink(target_path, link_path)
   end
 
+  # @api private
   def ensure_descendant(path, base = RuboCop::FileFinder.root_level)
     return unless base
     return if path.start_with?(base) && path != base

@@ -4,6 +4,7 @@
 
 require_relative 'cop_helper'
 require_relative 'expect_offense'
+require_relative 'file_helper'
 require_relative 'host_environment_simulation_helper'
 require_relative 'parallel_formatter'
 require_relative 'shared_contexts'
