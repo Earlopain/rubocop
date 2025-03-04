@@ -350,6 +350,7 @@ InternalAffairs/OnSendWithoutOnCSend:
     - 'lib/rubocop/cop/style/redundant_return.rb'
     - 'lib/rubocop/cop/style/require_order.rb'
     - 'lib/rubocop/cop/style/signal_exception.rb'
+    - 'lib/rubocop/cop/style/struct_keyword_init.rb'
     - 'lib/rubocop/cop/style/top_level_method_definition.rb'
 
     # not valid or plausible for safe navigation

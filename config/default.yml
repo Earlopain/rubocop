@@ -5605,6 +5605,12 @@ Style/StructInheritance:
   VersionAdded: '0.29'
   VersionChanged: '1.20'
 
+Style/StructKeywordInit:
+  Description: 'Checks for `Struct.new(..., keyword_init: true)` on Ruby >= 3.2.'
+  Enabled: pending
+  Safe: false
+  VersionAdded: '<<next>>'
+
 Style/SuperArguments:
   Description: 'Call `super` without arguments and parentheses when the signature is identical.'
   Enabled: pending
