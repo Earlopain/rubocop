@@ -127,14 +127,14 @@ module RuboCop
 
         private
 
-        def each_wrong_style(nodes, &block)
+        def each_wrong_style(nodes, &)
           case style
           when :module_function
-            check_module_function(nodes, &block)
+            check_module_function(nodes, &)
           when :extend_self
-            check_extend_self(nodes, &block)
+            check_extend_self(nodes, &)
           when :forbidden
-            check_forbidden(nodes, &block)
+            check_forbidden(nodes, &)
           end
         end
 

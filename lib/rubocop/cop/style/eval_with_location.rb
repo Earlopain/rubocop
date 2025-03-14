@@ -107,9 +107,9 @@ module RuboCop
           end
         end
 
-        def register_offense(node, &block)
+        def register_offense(node, &)
           msg = node.method?(:eval) ? MSG_EVAL : format(MSG, method_name: node.method_name)
-          add_offense(node, message: msg, &block)
+          add_offense(node, message: msg, &)
         end
 
         def special_file_keyword?(node)

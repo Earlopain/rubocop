@@ -8,8 +8,8 @@ module RuboCop
       OMIT_HASH_VALUE_MSG = 'Omit the hash value.'
       EXPLICIT_HASH_VALUE_MSG = 'Include the hash value.'
       DO_NOT_MIX_MSG_PREFIX = 'Do not mix explicit and implicit hash values.'
-      DO_NOT_MIX_OMIT_VALUE_MSG = "#{DO_NOT_MIX_MSG_PREFIX} #{OMIT_HASH_VALUE_MSG}"
-      DO_NOT_MIX_EXPLICIT_VALUE_MSG = "#{DO_NOT_MIX_MSG_PREFIX} #{EXPLICIT_HASH_VALUE_MSG}"
+      DO_NOT_MIX_OMIT_VALUE_MSG = "#{DO_NOT_MIX_MSG_PREFIX} #{OMIT_HASH_VALUE_MSG}".freeze
+      DO_NOT_MIX_EXPLICIT_VALUE_MSG = "#{DO_NOT_MIX_MSG_PREFIX} #{EXPLICIT_HASH_VALUE_MSG}".freeze
 
       DefNode = Struct.new(:node) do
         def selector
@@ -196,12 +196,12 @@ module RuboCop
           enforced_shorthand_syntax == 'either_consistent'
       end
 
-      def each_omitted_value_pair(hash_value_type_breakdown, &block)
-        hash_value_type_breakdown[:value_omitted]&.each(&block)
+      def each_omitted_value_pair(hash_value_type_breakdown, &)
+        hash_value_type_breakdown[:value_omitted]&.each(&)
       end
 
-      def each_omittable_value_pair(hash_value_type_breakdown, &block)
-        hash_value_type_breakdown[:value_omittable]&.each(&block)
+      def each_omittable_value_pair(hash_value_type_breakdown, &)
+        hash_value_type_breakdown[:value_omittable]&.each(&)
       end
 
       def mixed_shorthand_syntax_check(hash_value_type_breakdown)

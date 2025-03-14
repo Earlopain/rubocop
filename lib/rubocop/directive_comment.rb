@@ -8,15 +8,15 @@ module RuboCop
     # @api private
     LINT_DEPARTMENT = 'Lint'
     # @api private
-    LINT_REDUNDANT_DIRECTIVE_COP = "#{LINT_DEPARTMENT}/RedundantCopDisableDirective"
+    LINT_REDUNDANT_DIRECTIVE_COP = "#{LINT_DEPARTMENT}/RedundantCopDisableDirective".freeze
     # @api private
-    LINT_SYNTAX_COP = "#{LINT_DEPARTMENT}/Syntax"
+    LINT_SYNTAX_COP = "#{LINT_DEPARTMENT}/Syntax".freeze
     # @api private
     COP_NAME_PATTERN = '([A-Za-z]\w+/)*(?:[A-Za-z]\w+)'
     # @api private
-    COP_NAMES_PATTERN = "(?:#{COP_NAME_PATTERN} , )*#{COP_NAME_PATTERN}"
+    COP_NAMES_PATTERN = "(?:#{COP_NAME_PATTERN} , )*#{COP_NAME_PATTERN}".freeze
     # @api private
-    COPS_PATTERN = "(all|#{COP_NAMES_PATTERN})"
+    COPS_PATTERN = "(all|#{COP_NAMES_PATTERN})".freeze
     # @api private
     AVAILABLE_MODES = %w[disable enable todo].freeze
     # @api private
@@ -24,18 +24,13 @@ module RuboCop
     # @api private
     DIRECTIVE_MARKER_REGEXP = Regexp.new(DIRECTIVE_MARKER_PATTERN.gsub(' ', '\s*'))
     # @api private
-    DIRECTIVE_HEADER_PATTERN = "#{DIRECTIVE_MARKER_PATTERN}((?:#{AVAILABLE_MODES.join('|')}))\\b"
+    DHP = "#{DIRECTIVE_MARKER_PATTERN}((?:#{AVAILABLE_MODES.join('|')}))\\b".freeze
     # @api private
-    DIRECTIVE_COMMENT_REGEXP = Regexp.new(
-      "#{DIRECTIVE_HEADER_PATTERN} #{COPS_PATTERN}"
-        .gsub(' ', '\s*')
-    )
+    DIRECTIVE_COMMENT_REGEXP = Regexp.new("#{DHP} #{COPS_PATTERN}".gsub(' ', '\s*'))
     # @api private
     TRAILING_COMMENT_MARKER = '--'
     # @api private
-    MALFORMED_DIRECTIVE_WITHOUT_COP_NAME_REGEXP = Regexp.new(
-      "\\A#{DIRECTIVE_HEADER_PATTERN}\\s*\\z".gsub(' ', '\s*')
-    )
+    MALFORMED_DIRECTIVE_WITHOUT_COP_NAME_REGEXP = Regexp.new("\\A#{DHP}\\s*\\z".gsub(' ', '\s*'))
 
     def self.before_comment(line)
       line.split(DIRECTIVE_COMMENT_REGEXP).first

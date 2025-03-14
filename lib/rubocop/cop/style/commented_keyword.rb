@@ -55,12 +55,12 @@ module RuboCop
         ALLOWED_COMMENT_REGEXES = (ALLOWED_COMMENTS.map { |c| /#\s*#{c}/ } +
                                    [DirectiveComment::DIRECTIVE_COMMENT_REGEXP]).freeze
 
-        REGEXP = /(?<keyword>\S+).*#/.freeze
+        REGEXP = /(?<keyword>\S+).*#/
 
-        SUBCLASS_DEFINITION = /\A\s*class\s+(\w|::)+\s*<\s*(\w|::)+/.freeze
-        METHOD_DEFINITION = /\A\s*def\s/.freeze
+        SUBCLASS_DEFINITION = /\A\s*class\s+(\w|::)+\s*<\s*(\w|::)+/
+        METHOD_DEFINITION = /\A\s*def\s/
 
-        STEEP_REGEXP = /#\ssteep:ignore(\s|\z)/.freeze
+        STEEP_REGEXP = /#\ssteep:ignore(\s|\z)/
 
         def on_new_investigation
           processed_source.comments.each do |comment|

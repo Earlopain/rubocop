@@ -70,7 +70,7 @@ module RuboCop
 
         MSG = 'Redundant line continuation.'
         LINE_CONTINUATION = '\\'
-        LINE_CONTINUATION_PATTERN = /(\\\n)/.freeze
+        LINE_CONTINUATION_PATTERN = /(\\\n)/
         ALLOWED_STRING_TOKENS = %i[tSTRING tSTRING_CONTENT].freeze
         ARGUMENT_TYPES = %i[
           kDEF kDEFINED kFALSE kNIL kSELF kTRUE tAMPER tBANG tCARET tCHARACTER tCOLON3 tCONSTANT

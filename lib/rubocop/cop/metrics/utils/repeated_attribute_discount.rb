@@ -107,9 +107,9 @@ module RuboCop
           # associated key (method_name)
           # If the node is not a series of `(c)send` calls with no arguments,
           # then `nil` is yielded
-          def find_attributes(node, &block)
+          def find_attributes(node, &)
             if attribute_call?(node)
-              calls = find_attributes(node.receiver, &block)
+              calls = find_attributes(node.receiver, &)
               value = node.method_name
             elsif root_node?(node)
               calls = @known_attributes

@@ -105,7 +105,7 @@ module RuboCop
         end
 
         def message(variable)
-          message = +"Unused method argument - `#{variable.name}`."
+          message = "Unused method argument - `#{variable.name}`."
 
           unless variable.keyword_argument?
             message << " If it's necessary, use `_` or `_#{variable.name}` " \

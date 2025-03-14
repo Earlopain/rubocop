@@ -82,8 +82,8 @@ module RuboCop
         output
       end
 
-      def pluralize(*args)
-        ::RSpec::Core::Formatters::Helpers.pluralize(*args)
+      def pluralize(*)
+        ::RSpec::Core::Formatters::Helpers.pluralize(*)
       end
     end
   end

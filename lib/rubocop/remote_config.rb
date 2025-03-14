@@ -63,12 +63,12 @@ module RuboCop
       yield request
     end
 
-    def handle_response(response, limit, &block)
+    def handle_response(response, limit, &)
       case response
       when Net::HTTPSuccess, Net::HTTPNotModified, SocketError
         yield response
       when Net::HTTPRedirection
-        request(URI.parse(response['location']), limit - 1, &block)
+        request(URI.parse(response['location']), limit - 1, &)
       else
         begin
           response.error!

@@ -39,10 +39,10 @@ RSpec.describe 'RuboCop::CLI SuggestExtensions', :isolated_environment do # rubo
       def find_suggestions
         actual.call
         suggestions = (install_suggestion_regex.match($stdout.string) || {})[:suggestions]
-        self.install_suggested = suggestions ? suggestions.scan(/(?<=\* )[a-z0-9_-]+\b/.freeze) : []
+        self.install_suggested = suggestions ? suggestions.scan(/(?<=\* )[a-z0-9_-]+\b/) : []
 
         suggestions = (load_suggestion_regex.match($stdout.string) || {})[:suggestions]
-        self.load_suggested = suggestions ? suggestions.scan(/(?<=\* )[a-z0-9_-]+\b/.freeze) : []
+        self.load_suggested = suggestions ? suggestions.scan(/(?<=\* )[a-z0-9_-]+\b/) : []
       end
 
       chain :to_install do |*extensions|

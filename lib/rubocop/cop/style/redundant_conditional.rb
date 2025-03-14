@@ -29,7 +29,7 @@ module RuboCop
         extend AutoCorrector
 
         operators = RuboCop::AST::Node::COMPARISON_OPERATORS.to_a
-        COMPARISON_OPERATOR_MATCHER = "{:#{operators.join(' :')}}"
+        COMPARISON_OPERATOR_MATCHER = "{:#{operators.join(' :')}}".freeze
 
         MSG = 'This conditional expression can just be replaced by `%<msg>s`.'
 

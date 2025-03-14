@@ -194,10 +194,10 @@ module RuboCop
         end
         # rubocop:enable Style/FormatStringToken
 
-        def tokens(str_node, &block)
+        def tokens(str_node, &)
           return if str_node.source == '__FILE__'
 
-          token_ranges(str_contents(str_node.loc), &block)
+          token_ranges(str_contents(str_node.loc), &)
         end
 
         def str_contents(source_map)

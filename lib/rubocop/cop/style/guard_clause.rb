@@ -302,7 +302,7 @@ module RuboCop
           end
           used_lvars_in_branch = if_branch.each_descendant(:lvar).map(&:source) || []
 
-          (assigned_lvars_in_condition & used_lvars_in_branch).any?
+          assigned_lvars_in_condition.intersect?(used_lvars_in_branch)
         end
 
         def remove_whole_lines(corrector, range)

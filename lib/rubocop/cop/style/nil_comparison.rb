@@ -68,11 +68,11 @@ module RuboCop
           prefer_comparison? ? EXPLICIT_MSG : PREDICATE_MSG
         end
 
-        def style_check?(node, &block)
+        def style_check?(node, &)
           if prefer_comparison?
-            nil_check?(node, &block)
+            nil_check?(node, &)
           else
-            nil_comparison?(node, &block)
+            nil_comparison?(node, &)
           end
         end
 

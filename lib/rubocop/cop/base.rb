@@ -198,7 +198,7 @@ module RuboCop
       # Unless that offense is disabled for this range, a corrector will be yielded
       # to provide the cop the opportunity to autocorrect the offense.
       # If message is not specified, the method `message` will be called.
-      def add_offense(node_or_range, message: nil, severity: nil, &block)
+      def add_offense(node_or_range, message: nil, severity: nil, &)
         range = range_from_node_or_range(node_or_range)
         return unless current_offense_locations.add?(range)
 
@@ -207,7 +207,7 @@ module RuboCop
         severity = find_severity(range_to_pass, severity)
         message = find_message(range_to_pass, message)
 
-        status, corrector = enabled_line?(range.line) ? correct(range, &block) : :disabled
+        status, corrector = enabled_line?(range.line) ? correct(range, &) : :disabled
 
         # Since this range may be generated from Ruby code embedded in some
         # template file, we convert it to location info in the original file.

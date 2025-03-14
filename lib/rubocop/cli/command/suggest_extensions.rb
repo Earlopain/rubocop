@@ -81,7 +81,7 @@ module RuboCop
             extensions = {}
           end
 
-          extensions.select { |_, v| (Array(v) & dependent_gems).any? }.keys
+          extensions.select { |_, v| Array(v).intersect?(dependent_gems) }.keys
         end
 
         def extensions
@@ -122,9 +122,9 @@ module RuboCop
           lockfile.gems.map(&:name)
         end
 
-        def puts(*args)
+        def puts(*)
           output = (@options[:stderr] ? $stderr : $stdout)
-          output.puts(*args)
+          output.puts(*)
         end
       end
     end

@@ -41,7 +41,7 @@ module RuboCop
         MSG_NO_DEFINITION = '`%<basename>s` should define a class or module called `%<namespace>s`.'
         MSG_REGEX = '`%<basename>s` should match `%<regex>s`.'
 
-        SNAKE_CASE = /^[\d[[:lower:]]_.?!]+$/.freeze
+        SNAKE_CASE = /^[\d[[:lower:]]_.?!]+$/
 
         # @!method struct_definition(node)
         def_node_matcher :struct_definition, <<~PATTERN

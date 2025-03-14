@@ -4,7 +4,7 @@ module RuboCop
   # This class finds target files to inspect by scanning the directory tree and picking ruby files.
   # @api private
   class TargetFinder
-    HIDDEN_PATH_SUBSTRING = "#{File::SEPARATOR}."
+    HIDDEN_PATH_SUBSTRING = "#{File::SEPARATOR}.".freeze
 
     def initialize(config_store, options = {})
       @config_store = config_store

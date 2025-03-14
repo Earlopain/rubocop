@@ -57,7 +57,7 @@ module RuboCop
         MSG = 'Use `%<method_name>s` method call directly instead.'
         RESTRICT_ON_SEND = %i[public_send send __send__].freeze
         STATIC_METHOD_NAME_NODE_TYPES = %i[sym str].freeze
-        METHOD_NAME_PATTERN = /\A[a-zA-Z_][a-zA-Z0-9_]*[!?]?\z/.freeze
+        METHOD_NAME_PATTERN = /\A[a-zA-Z_][a-zA-Z0-9_]*[!?]?\z/
         RESERVED_WORDS = %i[
           BEGIN END alias and begin break case class def defined? do else elsif end ensure
           false for if in module next nil not or redo rescue retry return self super then true

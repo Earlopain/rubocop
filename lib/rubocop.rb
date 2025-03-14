@@ -10,7 +10,6 @@ before_us = $LOADED_FEATURES.dup
 require 'rainbow'
 
 require 'regexp_parser'
-require 'set'
 require 'stringio'
 require 'unicode/display_width'
 

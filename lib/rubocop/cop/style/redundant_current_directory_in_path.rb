@@ -20,8 +20,8 @@ module RuboCop
 
         MSG = 'Remove the redundant current directory path.'
         RESTRICT_ON_SEND = %i[require_relative].freeze
-        CURRENT_DIRECTORY_PREFIX = %r{./+}.freeze
-        REDUNDANT_CURRENT_DIRECTORY_PREFIX = /\A#{CURRENT_DIRECTORY_PREFIX}/.freeze
+        CURRENT_DIRECTORY_PREFIX = %r{./+}
+        REDUNDANT_CURRENT_DIRECTORY_PREFIX = /\A#{CURRENT_DIRECTORY_PREFIX}/
 
         def on_send(node)
           return unless (first_argument = node.first_argument)

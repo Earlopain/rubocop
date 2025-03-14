@@ -5,7 +5,7 @@ module RuboCop
   # @api private
   class ConfigRegeneration
     AUTO_GENERATED_FILE = RuboCop::CLI::Command::AutoGenerateConfig::AUTO_GENERATED_FILE
-    COMMAND_REGEX = /(?<=`rubocop )(.*?)(?=`)/.freeze
+    COMMAND_REGEX = /(?<=`rubocop )(.*?)(?=`)/
     DEFAULT_OPTIONS = { auto_gen_config: true }.freeze
 
     # Get options from the comment in the TODO file, and parse them as options

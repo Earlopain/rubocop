@@ -46,7 +46,7 @@ module RuboCop
         extend AutoCorrector
 
         MSG = 'Use underscores(_) as thousands separator and separate every 3 digits with them.'
-        DELIMITER_REGEXP = /[eE.]/.freeze
+        DELIMITER_REGEXP = /[eE.]/
 
         # The parameter is called MinDigits (meaning the minimum number of
         # digits for which an offense can be registered), but essentially it's
@@ -79,7 +79,7 @@ module RuboCop
           end
         end
 
-        def register_offense(node, &_block)
+        def register_offense(node, &)
           add_offense(node) do |corrector|
             yield
             corrector.replace(node, format_number(node))

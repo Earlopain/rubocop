@@ -1090,7 +1090,7 @@ RSpec.describe 'RuboCop::CLI options', :isolated_environment do # rubocop:disabl
     it 'shows config files' do
       create_file('example1.rb', "\tputs 0")
       expect(cli.run(['--debug', 'example1.rb'])).to eq(1)
-      home = File.dirname(File.dirname(File.dirname(File.dirname(__FILE__))))
+      home = File.dirname(__FILE__, 4)
       expect($stdout.string.lines.grep(/configuration/).map(&:chomp))
         .to eq(["For #{abs('')}: " \
                 "Default configuration from #{home}/config/default.yml"])
@@ -1250,7 +1250,7 @@ RSpec.describe 'RuboCop::CLI options', :isolated_environment do # rubocop:disabl
         printed_config = if defined?(YAML.unsafe_load) # RUBY_VERSION >= '3.1.0'
                            YAML.unsafe_load(out.join)
                          else
-                           YAML.load(out.join) # rubocop:disable Security/YAMLLoad
+                           YAML.load(out.join)
                          end
 
         expected_cop_names.each do |cop_name|

@@ -40,7 +40,7 @@ module RuboCop
         RESTRICT_ON_SEND = %i[
           byteindex byterindex gsub gsub! partition rpartition scan split start_with? sub sub!
         ].freeze
-        DETERMINISTIC_REGEX = /\A(?:#{LITERAL_REGEX})+\Z/.freeze
+        DETERMINISTIC_REGEX = /\A(?:#{LITERAL_REGEX})+\Z/
         STR_SPECIAL_CHARS = %w[
           \a \c \C \e \f \M \n \" \' \\\\ \t \b \f \r \u \v \x \0 \1 \2 \3 \4 \5 \6 \7
         ].freeze

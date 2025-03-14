@@ -102,7 +102,7 @@ module RuboCop
       maybe_hidden_file?(path) && File.basename(path).start_with?('.')
     end
 
-    HIDDEN_FILE_PATTERN = "#{File::SEPARATOR}."
+    HIDDEN_FILE_PATTERN = "#{File::SEPARATOR}.".freeze
 
     # Loose check to reduce memory allocations
     def maybe_hidden_file?(path)

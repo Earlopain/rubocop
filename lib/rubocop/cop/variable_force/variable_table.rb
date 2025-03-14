@@ -13,8 +13,8 @@ module RuboCop
           @hook_receiver = hook_receiver
         end
 
-        def invoke_hook(hook_name, *args)
-          @hook_receiver&.send(hook_name, *args)
+        def invoke_hook(hook_name, *)
+          @hook_receiver&.send(hook_name, *)
         end
 
         def scope_stack

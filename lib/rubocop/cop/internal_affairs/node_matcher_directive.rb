@@ -36,8 +36,8 @@ module RuboCop
         REGEXP_METHOD = /
           ^\s*\#\s*
           @!method\s+(?<receiver>self\.)?(?<method_name>[a-z0-9_]+[?!]?)(?:\((?<args>.*)\))?
-        /x.freeze
-        REGEXP_SCOPE = /^\s*\#\s*@!scope class/.freeze
+        /x
+        REGEXP_SCOPE = /^\s*\#\s*@!scope class/
 
         # @!method pattern_matcher?(node)
         def_node_matcher :pattern_matcher?, <<~PATTERN

@@ -27,7 +27,7 @@ module RuboCop
         exclude_limit 'Max'
 
         MSG = 'Avoid using more than %<max>i numbered %<parameter>s; %<count>i detected.'
-        NUMBERED_PARAMETER_PATTERN = /\A_[1-9]\z/.freeze
+        NUMBERED_PARAMETER_PATTERN = /\A_[1-9]\z/
 
         def on_numblock(node)
           param_count = numbered_parameter_nodes(node).uniq.count

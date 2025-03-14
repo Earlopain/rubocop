@@ -39,7 +39,7 @@ module RuboCop
         extend AutoCorrector
 
         MSG = 'Use `%<prefer>s` instead of `%<current>s`.'
-        UNUSED_BLOCK_ARG_MSG = "#{MSG.chop} and remove the unused `%<unused_code>s` block argument."
+        UNUSED_MSG = "#{MSG.chop} and remove the unused `%<unused_code>s` block argument.".freeze
         ARRAY_CONVERTER_METHODS = %i[assoc chunk flatten rassoc sort sort_by to_a].freeze
 
         # @!method kv_each(node)
@@ -137,9 +137,7 @@ module RuboCop
         end
 
         def message(prefer, method_name, unused_code)
-          format(
-            UNUSED_BLOCK_ARG_MSG, prefer: prefer, current: method_name, unused_code: unused_code
-          )
+          format(UNUSED_MSG, prefer: prefer, current: method_name, unused_code: unused_code)
         end
 
         def register_each_args_offense(node, message, prefer, unused_range)

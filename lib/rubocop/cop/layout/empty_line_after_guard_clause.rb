@@ -58,7 +58,7 @@ module RuboCop
 
         MSG = 'Add empty line after guard clause.'
         END_OF_HEREDOC_LINE = 1
-        SIMPLE_DIRECTIVE_COMMENT_PATTERN = /\A# *:nocov:\z/.freeze
+        SIMPLE_DIRECTIVE_COMMENT_PATTERN = /\A# *:nocov:\z/
 
         def on_if(node)
           return if correct_style?(node)

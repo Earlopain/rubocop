@@ -188,7 +188,7 @@ module RuboCop
     # @see https://www.gnu.org/software/emacs/manual/html_node/emacs/Specify-Coding.html
     # @see https://github.com/ruby/ruby/blob/3f306dc/parse.y#L6873-L6892 Emacs handling in parse.y
     class EmacsComment < EditorComment
-      REGEXP    = /-\*-(?<token>.+)-\*-/.freeze
+      REGEXP    = /-\*-(?<token>.+)-\*-/
       FORMAT    = '# -*- %s -*-'
       SEPARATOR = ';'
       OPERATOR  = ':'
@@ -216,7 +216,7 @@ module RuboCop
     #
     #   comment.encoding # => 'ascii-8bit'
     class VimComment < EditorComment
-      REGEXP    = /#\s*vim:\s*(?<token>.+)/.freeze
+      REGEXP    = /#\s*vim:\s*(?<token>.+)/
       FORMAT    = '# vim: %s'
       SEPARATOR = ', '
       OPERATOR  = '='

@@ -14,7 +14,7 @@ module RuboCop
         extend AutoCorrector
 
         MSG = 'Unnecessary utf-8 encoding comment.'
-        ENCODING_PATTERN = /#.*coding\s?[:=]\s?(?:UTF|utf)-8/.freeze
+        ENCODING_PATTERN = /#.*coding\s?[:=]\s?(?:UTF|utf)-8/
         SHEBANG = '#!'
 
         def on_new_investigation

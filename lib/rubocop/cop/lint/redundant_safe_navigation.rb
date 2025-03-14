@@ -90,7 +90,7 @@ module RuboCop
 
         NIL_SPECIFIC_METHODS = (nil.methods - Object.new.methods).to_set.freeze
 
-        SNAKE_CASE = /\A[[:digit:][:upper:]_]+\z/.freeze
+        SNAKE_CASE = /\A[[:digit:][:upper:]_]+\z/
 
         # @!method respond_to_nil_specific_method?(node)
         def_node_matcher :respond_to_nil_specific_method?, <<~PATTERN

@@ -16,7 +16,8 @@ AllCops:
     - 'tmp/**/*'
     - '.git/**/*'
     - 'bin/*'
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.3
+  ParserEngine: parser_prism
   SuggestExtensions: false
 
 Naming/PredicateName:

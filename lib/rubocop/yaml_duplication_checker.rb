@@ -4,8 +4,8 @@ module RuboCop
   # Find duplicated keys from YAML.
   # @api private
   module YAMLDuplicationChecker
-    def self.check(yaml_string, filename, &on_duplicated)
-      handler = DuplicationCheckHandler.new(&on_duplicated)
+    def self.check(yaml_string, filename, &)
+      handler = DuplicationCheckHandler.new(&)
       parser = Psych::Parser.new(handler)
       parser.parse(yaml_string, filename)
       parser.handler.root.children[0]

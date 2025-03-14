@@ -7,7 +7,7 @@ module RuboCop
       class << self
         include RangeHelp
 
-        COMMA_REGEXP = /(?<=\))\s*,/.freeze
+        COMMA_REGEXP = /(?<=\))\s*,/
 
         def correct(corrector, node)
           corrector.remove(node.loc.begin)

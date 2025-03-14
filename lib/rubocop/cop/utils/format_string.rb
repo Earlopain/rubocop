@@ -8,16 +8,16 @@ module RuboCop
         # Escaping the `#` in `INTERPOLATION` and `TEMPLATE_NAME` is necessary to
         # avoid a bug in Ruby 3.2.0
         # See: https://bugs.ruby-lang.org/issues/19379
-        DIGIT_DOLLAR  = /(?<arg_number>\d+)\$/.freeze
-        INTERPOLATION = /\#\{.*?\}/.freeze
-        FLAG          = /[ #0+-]|#{DIGIT_DOLLAR}/.freeze
-        NUMBER_ARG    = /\*#{DIGIT_DOLLAR}?/.freeze
-        NUMBER        = /\d+|#{NUMBER_ARG}|#{INTERPOLATION}/.freeze
-        WIDTH         = /(?<width>#{NUMBER})/.freeze
-        PRECISION     = /\.(?<precision>#{NUMBER}?)/.freeze
-        TYPE          = /(?<type>[bBdiouxXeEfgGaAcps])/.freeze
-        NAME          = /<(?<name>\w+)>/.freeze
-        TEMPLATE_NAME = /(?<!\#)\{(?<name>\w+)\}/.freeze
+        DIGIT_DOLLAR  = /(?<arg_number>\d+)\$/
+        INTERPOLATION = /\#\{.*?\}/
+        FLAG          = /[ #0+-]|#{DIGIT_DOLLAR}/
+        NUMBER_ARG    = /\*#{DIGIT_DOLLAR}?/
+        NUMBER        = /\d+|#{NUMBER_ARG}|#{INTERPOLATION}/
+        WIDTH         = /(?<width>#{NUMBER})/
+        PRECISION     = /\.(?<precision>#{NUMBER}?)/
+        TYPE          = /(?<type>[bBdiouxXeEfgGaAcps])/
+        NAME          = /<(?<name>\w+)>/
+        TEMPLATE_NAME = /(?<!\#)\{(?<name>\w+)\}/
 
         SEQUENCE = /
             % (?<type>%)
@@ -29,7 +29,7 @@ module RuboCop
               ) #{TYPE}
               | #{WIDTH}? #{PRECISION}? #{TEMPLATE_NAME}
             )
-        /x.freeze
+        /x
 
         # The syntax of a format sequence is as follows.
         #

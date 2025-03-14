@@ -31,7 +31,7 @@ module RuboCop
         extend AutoCorrector
 
         MSG = 'Remove the redundant heredoc delimiter quotes, use `%<replacement>s` instead.'
-        STRING_INTERPOLATION_OR_ESCAPED_CHARACTER_PATTERN = /#(\{|@|\$)|\\/.freeze
+        STRING_INTERPOLATION_OR_ESCAPED_CHARACTER_PATTERN = /#(\{|@|\$)|\\/
 
         def on_heredoc(node)
           return if need_heredoc_delimiter_quotes?(node)

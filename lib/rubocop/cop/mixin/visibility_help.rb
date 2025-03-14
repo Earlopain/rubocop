@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module RuboCop
   module Cop
     # Help methods for determining node visibility.

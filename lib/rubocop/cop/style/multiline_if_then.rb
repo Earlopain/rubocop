@@ -21,7 +21,7 @@ module RuboCop
         include RangeHelp
         extend AutoCorrector
 
-        NON_MODIFIER_THEN = /then\s*(#.*)?$/.freeze
+        NON_MODIFIER_THEN = /then\s*(#.*)?$/
 
         MSG = 'Do not use `then` for multi-line `%<keyword>s`.'
 

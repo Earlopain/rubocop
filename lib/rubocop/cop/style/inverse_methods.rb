@@ -49,7 +49,7 @@ module RuboCop
         SAFE_NAVIGATION_INCOMPATIBLE_METHODS = (CLASS_COMPARISON_METHODS + %i[any? none?]).freeze
         EQUALITY_METHODS = %i[== != =~ !~ <= >= < >].freeze
         NEGATED_EQUALITY_METHODS = %i[!= !~].freeze
-        CAMEL_CASE = /[A-Z]+[a-z]+/.freeze
+        CAMEL_CASE = /[A-Z]+[a-z]+/
 
         RESTRICT_ON_SEND = [:!].freeze
 

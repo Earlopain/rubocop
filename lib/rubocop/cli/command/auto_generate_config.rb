@@ -9,7 +9,7 @@ module RuboCop
         self.command_name = :auto_gen_config
 
         AUTO_GENERATED_FILE = '.rubocop_todo.yml'
-        YAML_OPTIONAL_DOC_START = /\A---(\s+#|\s*\z)/.freeze
+        YAML_OPTIONAL_DOC_START = /\A---(\s+#|\s*\z)/
         PLACEHOLDER = '###rubocop:inherit_here'
 
         PHASE_1 = 'Phase 1 of 2: run Layout/LineLength cop'

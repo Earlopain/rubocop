@@ -11,12 +11,12 @@ module RuboCop
 
         MSG = 'Department name is missing.'
 
-        DISABLE_COMMENT_FORMAT = /\A(# *rubocop *: *((dis|en)able|todo) +)(.*)/.freeze
+        DISABLE_COMMENT_FORMAT = /\A(# *rubocop *: *((dis|en)able|todo) +)(.*)/
 
         # The token that makes up a disable comment.
         # The allowed specification for comments after `# rubocop: disable` is
         # `DepartmentName/CopName` or` all`.
-        DISABLING_COPS_CONTENT_TOKEN = %r{[A-Za-z]+/[A-Za-z]+|all}.freeze
+        DISABLING_COPS_CONTENT_TOKEN = %r{[A-Za-z]+/[A-Za-z]+|all}
 
         def on_new_investigation
           processed_source.comments.each do |comment|

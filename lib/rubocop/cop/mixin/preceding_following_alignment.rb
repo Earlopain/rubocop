@@ -48,14 +48,14 @@ module RuboCop
         aligned_with_any_line_range?([pre, post], range, &predicate)
       end
 
-      def aligned_with_any_line_range?(line_ranges, range, &predicate)
-        return true if aligned_with_any_line?(line_ranges, range, &predicate)
+      def aligned_with_any_line_range?(line_ranges, range, &)
+        return true if aligned_with_any_line?(line_ranges, range, &)
 
         # If no aligned token was found, search for an aligned token on the
         # nearest line with the same indentation as the checked line.
         base_indentation = processed_source.lines[range.line - 1] =~ /\S/
 
-        aligned_with_any_line?(line_ranges, range, base_indentation, &predicate)
+        aligned_with_any_line?(line_ranges, range, base_indentation, &)
       end
 
       def aligned_with_any_line?(line_ranges, range, indent = nil, &predicate)

@@ -16,7 +16,7 @@ module RuboCop
                             u[0-9a-fA-F]{4}   |   # unicode char escape
                             u\{[^}]*\}        |   # extended unicode escape
                             .                     # any other escaped char
-                          )/x.freeze
+                          )/x
 
     private_constant :STRING_ESCAPES, :STRING_ESCAPE_REGEX
 

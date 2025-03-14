@@ -38,7 +38,7 @@ module RuboCop
         include RangeHelp
         extend AutoCorrector
 
-        SPACES_REGEXP = /\A[ \t]+\z/.freeze
+        SPACES_REGEXP = /\A[ \t]+\z/
 
         MSG = 'Avoid using spaces around a method call operator.'
 

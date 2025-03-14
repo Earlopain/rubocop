@@ -24,7 +24,7 @@ module RuboCop
         include Alignment
         extend AutoCorrector
 
-        LEADING_SPACE = /\A(\s*)/.freeze
+        LEADING_SPACE = /\A(\s*)/
 
         MSG = 'Use `Kernel#loop` for infinite loops.'
 

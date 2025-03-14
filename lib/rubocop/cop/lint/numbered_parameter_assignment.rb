@@ -30,7 +30,7 @@ module RuboCop
       class NumberedParameterAssignment < Base
         NUM_PARAM_MSG = '`_%<number>s` is reserved for numbered parameter; consider another name.'
         LVAR_MSG = '`_%<number>s` is similar to numbered parameter; consider another name.'
-        NUMBERED_PARAMETER_RANGE = (1..9).freeze
+        NUMBERED_PARAMETER_RANGE = (1..9)
 
         def on_lvasgn(node)
           return unless /\A_(\d+)\z/ =~ node.name

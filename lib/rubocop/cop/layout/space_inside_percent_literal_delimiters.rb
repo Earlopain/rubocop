@@ -39,8 +39,8 @@ module RuboCop
         extend AutoCorrector
 
         MSG = 'Do not use spaces inside percent literal delimiters.'
-        BEGIN_REGEX = /\A( +)/.freeze
-        END_REGEX = /(?<!\\)( +)\z/.freeze
+        BEGIN_REGEX = /\A( +)/
+        END_REGEX = /(?<!\\)( +)\z/
 
         def on_array(node)
           process(node, '%i', '%I', '%w', '%W')

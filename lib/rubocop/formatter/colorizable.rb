@@ -18,8 +18,8 @@ module RuboCop
         end
       end
 
-      def colorize(string, *args)
-        rainbow.wrap(string).color(*args)
+      def colorize(string, *)
+        rainbow.wrap(string).color(*)
       end
 
       %i[

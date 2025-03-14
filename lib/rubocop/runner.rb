@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'parallel'
+require 'vernier'
 
 module RuboCop
   # This class handles the processing of files, which includes dealing with
@@ -66,11 +67,16 @@ module RuboCop
 
     def run(paths)
       target_files = find_target_files(paths)
+      puts "Parsing..."
+      sources = target_files.map { get_processed_source(_1) }
+      puts "Done!"
       if @options[:list_target_files]
         list_files(target_files)
       else
-        warm_cache(target_files) if @options[:parallel]
-        inspect_files(target_files)
+        puts "Profiling..."
+        Vernier.profile(out: "time_profile.json") do
+          inspect_files(target_files, sources)
+        end
       end
     rescue Interrupt
       self.aborting = true
@@ -112,12 +118,12 @@ module RuboCop
       target_files.each(&:freeze).freeze
     end
 
-    def inspect_files(files)
+    def inspect_files(files, sources)
       inspected_files = []
 
       formatter_set.started(files)
 
-      each_inspected_file(files) { |file| inspected_files << file }
+      each_inspected_file(files, sources) { |file| inspected_files << file }
     ensure
       # OPTIMIZE: Calling `ResultCache.cleanup` takes time. This optimization
       # mainly targets editors that integrates RuboCop. When RuboCop is run
@@ -130,9 +136,9 @@ module RuboCop
       formatter_set.close_output_files
     end
 
-    def each_inspected_file(files)
-      files.reduce(true) do |all_passed, file|
-        offenses = process_file(file)
+    def each_inspected_file(files, sources)
+      files.zip(sources).reduce(true) do |all_passed, (file, source)|
+        offenses = process_file(file, source)
         yield file
 
         if offenses.any? { |o| considered_failure?(o) && offense_displayed?(o) }
@@ -149,9 +155,9 @@ module RuboCop
       paths.each { |path| puts PathUtil.relative_path(path) }
     end
 
-    def process_file(file)
+    def process_file(file, source)
       file_started(file)
-      offenses = file_offenses(file)
+      offenses = file_offenses(file, source)
     rescue InfiniteCorrectionLoop => e
       raise e if @options[:raise_cop_error]
 
@@ -162,9 +168,9 @@ module RuboCop
       file_finished(file, offenses || [])
     end
 
-    def file_offenses(file)
+    def file_offenses(file, source)
       file_offense_cache(file) do
-        source, offenses = do_inspection_loop(file)
+        source, offenses = do_inspection_loop(file, source)
         offenses = add_redundant_disables(file, offenses.compact.sort, source)
         offenses.sort.reject(&:disabled?).freeze
       end
@@ -237,7 +243,7 @@ module RuboCop
     end
 
     def except_redundant_cop_disable_directive?
-      @options[:except] && (@options[:except] & REDUNDANT_COP_DISABLE_DIRECTIVE_RULES).any?
+      @options[:except]&.intersect?(REDUNDANT_COP_DISABLE_DIRECTIVE_RULES)
     end
 
     def file_started(file)
@@ -272,8 +278,7 @@ module RuboCop
       cache.save(offenses)
     end
 
-    def do_inspection_loop(file)
-      processed_source = get_processed_source(file)
+    def do_inspection_loop(file, processed_source)
       # This variable is 2d array used to track corrected offenses after each
       # inspection iteration. This is used to output meaningful infinite loop
       # error message.

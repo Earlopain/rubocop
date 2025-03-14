@@ -21,7 +21,7 @@ module RuboCop
         MSG = 'Use SCREAMING_SNAKE_CASE for constants.'
         # Use POSIX character classes, so we allow accented characters rather
         # than just standard ASCII characters
-        SNAKE_CASE = /^[[:digit:][:upper:]_]+$/.freeze
+        SNAKE_CASE = /^[[:digit:][:upper:]_]+$/
 
         # @!method class_or_struct_return_method?(node)
         def_node_matcher :class_or_struct_return_method?, <<~PATTERN

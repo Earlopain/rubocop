@@ -32,7 +32,7 @@ module RuboCop
         MSG = 'Ranges from upper to lower case ASCII letters may include unintended ' \
               'characters. Instead of `A-z` (which also includes several symbols) ' \
               'specify each range individually: `A-Za-z` and individually specify any symbols.'
-        RANGES = [('a'..'z').freeze, ('A'..'Z').freeze].freeze
+        RANGES = [('a'..'z'), ('A'..'Z')].freeze
 
         def on_irange(node)
           return unless node.children.compact.all?(&:str_type?)

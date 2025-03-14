@@ -286,8 +286,8 @@ module RuboCop
       end
     end
 
-    def transform(config, &block)
-      config.transform_values(&block)
+    def transform(config, &)
+      config.transform_values(&)
     end
 
     def gem_config_path(gem_name, relative_config_path)

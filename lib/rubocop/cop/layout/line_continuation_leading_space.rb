@@ -44,10 +44,10 @@ module RuboCop
         include RangeHelp
         extend AutoCorrector
 
-        LINE_1_ENDING = /['"]\s*\\\n/.freeze
-        LINE_2_BEGINNING = /\A\s*['"]/.freeze
-        LEADING_STYLE_OFFENSE = /(?<trailing_spaces>\s+)(?<ending>#{LINE_1_ENDING})/.freeze
-        TRAILING_STYLE_OFFENSE = /(?<beginning>#{LINE_2_BEGINNING})(?<leading_spaces>\s+)/.freeze
+        LINE_1_ENDING = /['"]\s*\\\n/
+        LINE_2_BEGINNING = /\A\s*['"]/
+        LEADING_STYLE_OFFENSE = /(?<trailing_spaces>\s+)(?<ending>#{LINE_1_ENDING})/
+        TRAILING_STYLE_OFFENSE = /(?<beginning>#{LINE_2_BEGINNING})(?<leading_spaces>\s+)/
         private_constant :LINE_1_ENDING, :LINE_2_BEGINNING,
                          :LEADING_STYLE_OFFENSE, :TRAILING_STYLE_OFFENSE
 

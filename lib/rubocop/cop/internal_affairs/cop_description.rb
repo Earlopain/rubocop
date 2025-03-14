@@ -35,9 +35,9 @@ module RuboCop
 
         SPECIAL_WORDS = %w[is can could should will would must may].freeze
         COP_DESC_OFFENSE_REGEX =
-          /^\s+# This cop (?<special>#{SPECIAL_WORDS.join('|')})?\s*(?<word>.+?) .*/.freeze
-        REPLACEMENT_REGEX = /^\s+# This cop (#{SPECIAL_WORDS.join('|')})?\s*(.+?) /.freeze
-        EMPTY_COMMENT_LINE_REGEX = /\A\s*#\s*\n\z/.freeze
+          /^\s+# This cop (?<special>#{SPECIAL_WORDS.join('|')})?\s*(?<word>.+?) .*/
+        REPLACEMENT_REGEX = /^\s+# This cop (#{SPECIAL_WORDS.join('|')})?\s*(.+?) /
+        EMPTY_COMMENT_LINE_REGEX = /\A\s*#\s*\n\z/
 
         def on_class(node)
           return unless (module_node = node.parent) && node.parent_class

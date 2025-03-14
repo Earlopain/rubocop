@@ -127,7 +127,7 @@ module RuboCop
       end
 
       def use_server_option?(argv)
-        (argv & SERVER_OPTIONS).any?
+        argv.intersect?(SERVER_OPTIONS)
       end
 
       def allowed_option_count

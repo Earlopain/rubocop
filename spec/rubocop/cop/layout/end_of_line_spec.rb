@@ -18,7 +18,7 @@ RSpec.describe RuboCop::Cop::Layout::EndOfLine, :config do
       # 'whitequark/parser' gem, not RuboCop itself so these test really belongs there(?)
 
       encoding = 'iso-8859-15'
-      input = (+<<~RUBY).force_encoding(encoding)
+      input = <<~RUBY.force_encoding(encoding)
         # coding: ISO-8859-15#{eol}
         # Euro symbol: \xa4#{eol}
       RUBY

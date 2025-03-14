@@ -56,7 +56,7 @@ module RuboCop
 
         REQUIRED_MSG = 'Dependency version specification is required.'
         FORBIDDEN_MSG = 'Dependency version specification is forbidden.'
-        VERSION_SPECIFICATION_REGEX = /^\s*[~<>=]*\s*[0-9.]+/.freeze
+        VERSION_SPECIFICATION_REGEX = /^\s*[~<>=]*\s*[0-9.]+/
 
         ADD_DEPENDENCY_METHODS = %i[
           add_dependency add_runtime_dependency add_development_dependency

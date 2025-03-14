@@ -75,8 +75,8 @@ module RuboCop
       #   # good - with inline comment or replace it with block comment using heredoc
       #   class_eval("def #{unsafe_method}!(*params); end # def capitalize!(*params); end")
       class DocumentDynamicEvalDefinition < Base
-        BLOCK_COMMENT_REGEXP = /^\s*#(?!{)/.freeze
-        COMMENT_REGEXP = /\s*#(?!{).*/.freeze
+        BLOCK_COMMENT_REGEXP = /^\s*#(?!{)/
+        COMMENT_REGEXP = /\s*#(?!{).*/
         MSG = 'Add a comment block showing its appearance if interpolated.'
 
         RESTRICT_ON_SEND = %i[eval class_eval module_eval instance_eval].freeze

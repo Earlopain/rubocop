@@ -9,7 +9,7 @@ module RuboCop
         module OmitParentheses
           include RangeHelp
 
-          TRAILING_WHITESPACE_REGEX = /\s+\Z/.freeze
+          TRAILING_WHITESPACE_REGEX = /\s+\Z/
           OMIT_MSG = 'Omit parentheses for method calls with arguments.'
           private_constant :OMIT_MSG
 

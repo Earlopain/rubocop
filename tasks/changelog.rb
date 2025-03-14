@@ -3,11 +3,11 @@
 # Changelog utility
 class Changelog
   ENTRIES_PATH = 'changelog/'
-  FIRST_HEADER = /#{Regexp.escape("## master (unreleased)\n")}/m.freeze
-  ENTRIES_PATH_TEMPLATE = "#{ENTRIES_PATH}%<type>s_%<name>s_%<timestamp>s.md"
-  TYPE_REGEXP = /#{Regexp.escape(ENTRIES_PATH)}([a-z]+)_/.freeze
+  FIRST_HEADER = /#{Regexp.escape("## master (unreleased)\n")}/m
+  ENTRIES_PATH_TEMPLATE = "#{ENTRIES_PATH}%<type>s_%<name>s_%<timestamp>s.md".freeze
+  TYPE_REGEXP = /#{Regexp.escape(ENTRIES_PATH)}([a-z]+)_/
   TYPE_TO_HEADER = { new: 'New features', fix: 'Bug fixes', change: 'Changes' }.freeze
-  HEADER = /### (.*)/.freeze
+  HEADER = /### (.*)/
   PATH = 'CHANGELOG.md'
   REF_URL = 'https://github.com/rubocop/rubocop'
   MAX_LENGTH = 50

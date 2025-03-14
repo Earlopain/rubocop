@@ -31,8 +31,8 @@ module RuboCop
         extend AutoCorrector
 
         QUOTES_AND_COMMAS = [/,$/, /^'.*'$/, /^".*"$/].freeze
-        LEADING_QUOTE = /^['"]/.freeze
-        TRAILING_QUOTE = /['"]?,?$/.freeze
+        LEADING_QUOTE = /^['"]/
+        TRAILING_QUOTE = /['"]?,?$/
 
         MSG = "Within `%w`/`%W`, quotes and ',' are unnecessary and may be " \
               'unwanted in the resulting strings.'

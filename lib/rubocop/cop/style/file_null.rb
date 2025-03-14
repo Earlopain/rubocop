@@ -45,7 +45,7 @@ module RuboCop
       class FileNull < Base
         extend AutoCorrector
 
-        REGEXP = %r{\A(/dev/null|NUL:?)\z}i.freeze
+        REGEXP = %r{\A(/dev/null|NUL:?)\z}i
         MSG = 'Use `File::NULL` instead of `%<source>s`.'
 
         def on_new_investigation

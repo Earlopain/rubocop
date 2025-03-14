@@ -18,7 +18,7 @@ module RuboCop
             default = default_cop_config['PreferredMethods']
             merged = cop_config['PreferredMethods']
             overrides = merged.values - default.values
-            merged.reject { |key, _| overrides.include?(key) }.transform_keys(&:to_sym)
+            merged.except(*overrides).transform_keys(&:to_sym)
           end
       end
 

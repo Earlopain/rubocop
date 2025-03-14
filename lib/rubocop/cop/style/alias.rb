@@ -83,12 +83,12 @@ module RuboCop
             node.each_ancestor(:def).none?
         end
 
-        def add_offense_for_args(node, &block)
+        def add_offense_for_args(node, &)
           existing_args  = node.children.map(&:source).join(' ')
           preferred_args = node.children.map { |a| a.source[1..] }.join(' ')
           arg_ranges     = node.children.map(&:source_range)
           msg            = format(MSG_SYMBOL_ARGS, prefer: preferred_args, current: existing_args)
-          add_offense(arg_ranges.reduce(&:join), message: msg, &block)
+          add_offense(arg_ranges.reduce(&:join), message: msg, &)
         end
 
         # In this expression, will `self` be the same as the innermost enclosing

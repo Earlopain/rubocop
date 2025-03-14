@@ -21,8 +21,8 @@ module RuboCop
         RuboCop::CLI::Command::AutoGenerateConfig::AUTO_GENERATED_FILE
       ].freeze
 
-      def self.handle(name, &block)
-        define_method(:"handle_#{name}", &block)
+      def self.handle(name, &)
+        define_method(:"handle_#{name}", &)
       end
 
       private_class_method :handle

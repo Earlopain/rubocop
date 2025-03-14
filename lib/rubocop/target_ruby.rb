@@ -150,7 +150,7 @@ module RuboCop
     # @api private
     class RubyVersionFile < Source
       RUBY_VERSION_FILENAME = '.ruby-version'
-      RUBY_VERSION_PATTERN = /\A(?:ruby-)?(?<version>\d+\.\d+)/.freeze
+      RUBY_VERSION_PATTERN = /\A(?:ruby-)?(?<version>\d+\.\d+)/
 
       def name
         "`#{RUBY_VERSION_FILENAME}`"
@@ -183,7 +183,7 @@ module RuboCop
     # @api private
     class ToolVersionsFile < RubyVersionFile
       TOOL_VERSIONS_FILENAME = '.tool-versions'
-      TOOL_VERSIONS_PATTERN = /^(?:ruby )(?<version>\d+\.\d+)/.freeze
+      TOOL_VERSIONS_PATTERN = /^(?:ruby )(?<version>\d+\.\d+)/
 
       def name
         "`#{TOOL_VERSIONS_FILENAME}`"

@@ -276,7 +276,7 @@ module RuboCop
 
     # Creates a section of options in order to separate them visually when
     # using `--help`.
-    def section(opts, heading, &_block)
+    def section(opts, heading, &)
       heading = rainbow.wrap(heading).bright
       opts.separator("\n#{heading}:\n")
       yield
@@ -476,11 +476,12 @@ module RuboCop
 
     def only_includes_redundant_disable?
       @options.key?(:only) &&
-        (@options[:only] & %w[Lint/RedundantCopDisableDirective RedundantCopDisableDirective]).any?
+        @options[:only].intersect?(%w[Lint/RedundantCopDisableDirective
+                                      RedundantCopDisableDirective])
     end
 
     def except_syntax?
-      @options.key?(:except) && (@options[:except] & %w[Lint/Syntax Syntax]).any?
+      @options.key?(:except) && @options[:except].intersect?(%w[Lint/Syntax Syntax])
     end
 
     def boolean_or_empty_cache?

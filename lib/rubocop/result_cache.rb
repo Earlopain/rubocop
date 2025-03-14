@@ -218,7 +218,7 @@ module RuboCop
     # no effect on which offenses and disabled line ranges are found, and thus
     # don't affect caching.
     def relevant_options_digest(options)
-      options = options.reject { |key, _| NON_CHANGING.include?(key) }
+      options = options.except(*NON_CHANGING)
       options.to_s.gsub(/[^a-z]+/i, '_')
     end
 

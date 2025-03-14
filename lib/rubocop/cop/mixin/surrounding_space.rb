@@ -9,7 +9,7 @@ module RuboCop
       NO_SPACE_COMMAND = 'Do not use'
       SPACE_COMMAND = 'Use'
 
-      SINGLE_SPACE_REGEXP = /[ \t]/.freeze
+      SINGLE_SPACE_REGEXP = /[ \t]/
 
       private
 
