@@ -10,7 +10,9 @@ module RubyLsp
       include RubyLsp::Requests::Support::Formatter
 
       def initialize
+        options, _args = ::RuboCop::Options.new.parse([])
         config_store = ::RuboCop::ConfigStore.new
+        config_store.apply_options(options)
 
         @runtime = ::RuboCop::LSP::Runtime.new(config_store)
       end
